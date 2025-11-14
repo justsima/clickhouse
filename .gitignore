@@ -1,0 +1,41 @@
+# Sensitive Configuration
+.env
+*.env
+!.env.example
+
+# Generated Reports (contain credentials/IPs)
+*_report.txt
+*_info.txt
+environment_info.txt
+mysql_validation_report.txt
+replication_user_info.txt
+network_validation_report.txt
+
+# Logs
+*.log
+logs/
+
+# Docker volumes
+volumes/
+data/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Temporary files
+tmp/
+temp/
+*.tmp
