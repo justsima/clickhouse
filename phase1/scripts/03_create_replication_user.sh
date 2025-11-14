@@ -201,95 +201,55 @@ else
     echo ""
 
     echo "========================================"
-    echo "   Attempting to Create Dedicated User"
+    echo "   Required Actions"
     echo "========================================"
     echo ""
-
-    if [ -z "$MYSQL_REPLICATION_USER" ] || [ -z "$MYSQL_REPLICATION_PASSWORD" ]; then
-        echo -e "${RED}ERROR: MYSQL_REPLICATION_USER and MYSQL_REPLICATION_PASSWORD must be set in .env${NC}"
-        echo ""
-        echo "Please add to your .env file:"
-        echo "  MYSQL_REPLICATION_USER=debezium_user"
-        echo "  MYSQL_REPLICATION_PASSWORD=<secure_password>"
-        exit 1
-    fi
-
-    echo "Attempting to create user: ${MYSQL_REPLICATION_USER}"
+    echo "To enable CDC with Debezium, grant these privileges to '${MYSQL_USER}':"
     echo ""
 
-    # Check if user exists
-    USER_EXISTS=$($MYSQL_CMD -e "SELECT User FROM mysql.user WHERE User='${MYSQL_REPLICATION_USER}';" 2>/dev/null || echo "")
-
-    if [ -n "$USER_EXISTS" ]; then
-        print_info "User '${MYSQL_REPLICATION_USER}' already exists"
-        echo ""
-        read -p "Do you want to drop and recreate it? (yes/no): " RECREATE
-
-        if [ "$RECREATE" = "yes" ]; then
-            echo "Dropping existing user..."
-            $MYSQL_CMD -e "DROP USER IF EXISTS '${MYSQL_REPLICATION_USER}'@'%';" 2>/dev/null
-            print_status $? "Existing user dropped"
-        fi
+    if [ $HAS_REPLICATION_SLAVE -eq 0 ]; then
+        echo "  GRANT REPLICATION SLAVE ON *.* TO '${MYSQL_USER}'@'%';"
     fi
 
-    # Try to create user
-    echo "Creating user '${MYSQL_REPLICATION_USER}'..."
-    CREATE_RESULT=$($MYSQL_CMD -e "CREATE USER IF NOT EXISTS '${MYSQL_REPLICATION_USER}'@'%' IDENTIFIED BY '${MYSQL_REPLICATION_PASSWORD}';" 2>&1)
-
-    if echo "$CREATE_RESULT" | grep -qi "Access denied\|ERROR 1227"; then
-        echo ""
-        echo -e "${RED}✗ Cannot create user - insufficient privileges${NC}"
-        echo ""
-        echo "Your '${MYSQL_USER}' does not have CREATE USER privilege."
-        echo ""
-        echo "========================================"
-        echo "   Solution Options"
-        echo "========================================"
-        echo ""
-        echo "Option 1: Create user via DigitalOcean Dashboard"
-        echo "  1. Go to DigitalOcean Dashboard"
-        echo "  2. Databases → Your MySQL → Users & Databases"
-        echo "  3. Click 'Add new user'"
-        echo "  4. Username: ${MYSQL_REPLICATION_USER}"
-        echo "  5. Password: ${MYSQL_REPLICATION_PASSWORD}"
-        echo "  6. Grant SELECT on database: ${MYSQL_DATABASE}"
-        echo ""
-        echo "Option 2: Contact your database admin"
-        echo "  Ask them to create a user with these privileges:"
-        echo "    - REPLICATION SLAVE"
-        echo "    - REPLICATION CLIENT"
-        echo "    - SELECT on ${MYSQL_DATABASE}.*"
-        echo ""
-        echo "Option 3: Use current user (if you can get privileges granted)"
-        echo "  Contact DigitalOcean support to add these privileges to '${MYSQL_USER}':"
-        echo "    - REPLICATION SLAVE"
-        echo "    - REPLICATION CLIENT"
-        echo ""
-
-        exit 1
-    else
-        print_status 0 "User created successfully"
-        echo ""
-
-        # Grant privileges
-        echo "Granting privileges..."
-        $MYSQL_CMD -e "GRANT REPLICATION SLAVE ON *.* TO '${MYSQL_REPLICATION_USER}'@'%';" 2>/dev/null
-        print_status $? "REPLICATION SLAVE granted"
-
-        $MYSQL_CMD -e "GRANT REPLICATION CLIENT ON *.* TO '${MYSQL_REPLICATION_USER}'@'%';" 2>/dev/null
-        print_status $? "REPLICATION CLIENT granted"
-
-        $MYSQL_CMD -e "GRANT SELECT ON ${MYSQL_DATABASE}.* TO '${MYSQL_REPLICATION_USER}'@'%';" 2>/dev/null
-        print_status $? "SELECT on ${MYSQL_DATABASE}.* granted"
-
-        $MYSQL_CMD -e "FLUSH PRIVILEGES;" 2>/dev/null
-        print_status $? "Privileges flushed"
-
-        echo ""
-        echo -e "${GREEN}✓ Replication user '${MYSQL_REPLICATION_USER}' created successfully${NC}"
-        echo ""
-        echo "Next step: Run network validation"
-        echo "  ./04_network_validation.sh"
-        echo ""
+    if [ $HAS_REPLICATION_CLIENT -eq 0 ]; then
+        echo "  GRANT REPLICATION CLIENT ON *.* TO '${MYSQL_USER}'@'%';"
     fi
+
+    if [ $HAS_SELECT -eq 0 ]; then
+        echo "  GRANT SELECT ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%';"
+    fi
+
+    echo "  FLUSH PRIVILEGES;"
+    echo ""
+
+    echo "After granting privileges, re-run this script to verify:"
+    echo "  ./03_create_replication_user.sh"
+    echo ""
+
+    # Save to report
+    REPORT_FILE="${SCRIPT_DIR}/../replication_user_info.txt"
+    {
+        echo "=== Replication User Info ==="
+        echo "Date: $(date)"
+        echo ""
+        echo "Status: Missing privileges"
+        echo "User: ${MYSQL_USER}"
+        echo ""
+        echo "Missing privileges:"
+        [ $HAS_REPLICATION_SLAVE -eq 0 ] && echo "  - REPLICATION SLAVE"
+        [ $HAS_REPLICATION_CLIENT -eq 0 ] && echo "  - REPLICATION CLIENT"
+        [ $HAS_SELECT -eq 0 ] && echo "  - SELECT on database"
+        [ $CAN_READ_BINLOG -eq 0 ] && echo "  - Cannot read binlog position"
+        echo ""
+        echo "Required SQL commands:"
+        [ $HAS_REPLICATION_SLAVE -eq 0 ] && echo "  GRANT REPLICATION SLAVE ON *.* TO '${MYSQL_USER}'@'%';"
+        [ $HAS_REPLICATION_CLIENT -eq 0 ] && echo "  GRANT REPLICATION CLIENT ON *.* TO '${MYSQL_USER}'@'%';"
+        [ $HAS_SELECT -eq 0 ] && echo "  GRANT SELECT ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%';"
+        echo "  FLUSH PRIVILEGES;"
+    } > "$REPORT_FILE"
+
+    print_info "Report saved to: $REPORT_FILE"
+    echo ""
+
+    exit 1
 fi
