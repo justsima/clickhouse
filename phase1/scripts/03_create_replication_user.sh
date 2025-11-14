@@ -50,7 +50,7 @@ if [ -z "$MYSQL_HOST" ] || [ -z "$MYSQL_USER" ] || [ -z "$MYSQL_PASSWORD" ]; the
 fi
 
 # MySQL connection
-MYSQL_CMD="mysql -h${MYSQL_HOST} -P${MYSQL_PORT} -u${MYSQL_USER} -p${MYSQL_PASSWORD} 2>/dev/null"
+MYSQL_CMD="mysql -h${MYSQL_HOST} -P${MYSQL_PORT} -u${MYSQL_USER} -p${MYSQL_PASSWORD}"
 
 echo "Step 1: Testing Current User Privileges"
 echo "-----------------------------------------"
@@ -58,7 +58,7 @@ echo "User: ${MYSQL_USER}"
 echo ""
 
 # Test connection
-if ! $MYSQL_CMD -e "SELECT 1;" &> /dev/null; then
+if ! $MYSQL_CMD -e "SELECT 1;" 2>/dev/null 1>/dev/null; then
     echo -e "${RED}✗ Cannot connect with current user${NC}"
     exit 1
 fi
