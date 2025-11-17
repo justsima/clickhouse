@@ -1,0 +1,36 @@
+{
+  "name": "clickhouse-sink-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.jdbc.JdbcSinkConnector",
+    "tasks.max": "4",
+
+    "topics.regex": "mysql\\.${MYSQL_DATABASE}\\..*",
+
+    "connection.url": "jdbc:clickhouse://${CLICKHOUSE_HOST}:${CLICKHOUSE_NATIVE_PORT}/${CLICKHOUSE_DATABASE}",
+    "connection.username": "${CLICKHOUSE_USER}",
+    "connection.password": "${CLICKHOUSE_PASSWORD}",
+
+    "insert.mode": "upsert",
+    "delete.enabled": "true",
+    "primary.key.mode": "record_key",
+
+    "schema.evolution": "none",
+    "quote.identifiers": "true",
+
+    "batch.size": "3000",
+    "max.retries": "10",
+    "retry.backoff.ms": "3000",
+
+    "errors.tolerance": "all",
+    "errors.log.enable": "true",
+    "errors.log.include.messages": "true",
+    "errors.deadletterqueue.topic.name": "clickhouse-dlq",
+    "errors.deadletterqueue.topic.replication.factor": "1",
+    "errors.deadletterqueue.context.headers.enable": "true",
+
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": "false",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false"
+  }
+}
