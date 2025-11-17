@@ -12,41 +12,42 @@ MySQL (DO) → Debezium → Redpanda (Kafka) → ClickHouse Sink → ClickHouse 
 
 | Phase | Status | Description |
 |-------|--------|-------------|
-| **Phase 1** | ✅ Ready | Foundation & Prerequisites |
-| **Phase 2** | 🔜 Pending | Service Deployment & Configuration |
+| **Phase 1** | ✅ Complete | Foundation & Prerequisites |
+| **Phase 2** | ✅ Ready | Service Deployment & Configuration |
 | **Phase 3** | 🔜 Pending | Data Pipeline Implementation |
 | **Phase 4** | 🔜 Pending | Operational Readiness & BI Integration |
 
 ## Quick Start
 
-### Current Phase: Phase 1 - Foundation & Prerequisites
+### Current Phase: Phase 2 - Service Deployment
 
-**Objective**: Validate environment and prerequisites before deployment
+**Objective**: Deploy Redpanda, Kafka Connect, ClickHouse, and Redpanda Console
 
-**Duration**: 1-2 hours
+**Duration**: 15-20 minutes
 
 **Steps**:
-1. Configure credentials:
+1. Navigate to Phase 2:
    ```bash
-   cd phase1/configs
-   cp .env.example .env
-   vi .env  # Fill in your MySQL credentials
+   cd /home/centos/clickhouse/phase2
    ```
 
-2. Run validation scripts:
+2. Deploy all services:
    ```bash
-   cd phase1/scripts
-   ./01_environment_check.sh       # Check VPS resources
-   ./02_mysql_validation.sh         # Validate MySQL config
-   ./03_create_replication_user.sh  # Create Debezium user
-   ./04_network_validation.sh       # Test throughput
+   chmod +x scripts/*.sh
+   ./scripts/deploy.sh
    ```
 
-3. Review documentation:
+3. Verify services are healthy:
    ```bash
-   cat phase1/docs/ARCHITECTURE.md
-   cat phase1/docs/PORTS_AND_SECURITY.md
+   ./scripts/health_check.sh
    ```
+
+4. Access services:
+   - **Redpanda Console**: http://localhost:8086
+   - **ClickHouse Web UI**: http://localhost:8123/play
+   - **Kafka Connect API**: http://localhost:8085
+
+**Full Instructions**: See [phase2/README.md](phase2/README.md)
 
 4. Check validation reports:
    ```bash
