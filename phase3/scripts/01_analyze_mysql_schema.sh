@@ -2,7 +2,8 @@
 # Phase 3 - MySQL Schema Analysis Script
 # Purpose: Analyze MySQL database and generate ClickHouse DDL
 
-set -e
+# Don't exit on error - we'll handle errors explicitly
+set +e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PHASE3_DIR="$(dirname "$SCRIPT_DIR")"
@@ -28,6 +29,10 @@ print_info() {
     echo -e "${BLUE}ℹ${NC} $1"
 }
 
+print_error() {
+    echo -e "${RED}ERROR:${NC} $1"
+}
+
 echo "========================================"
 echo "   MySQL Schema Analysis"
 echo "========================================"
@@ -37,9 +42,35 @@ echo ""
 if [ -f "$CONFIG_DIR/.env" ]; then
     source "$CONFIG_DIR/.env"
 else
-    echo -e "${RED}ERROR: .env file not found at $CONFIG_DIR/.env${NC}"
+    print_error ".env file not found at $CONFIG_DIR/.env"
+    echo "Run: cp $CONFIG_DIR/.env.example $CONFIG_DIR/.env"
     exit 1
 fi
+
+# Check for Python
+echo "0. Checking Prerequisites"
+echo "-------------------------"
+
+if command -v python3 &> /dev/null; then
+    PYTHON_CMD="python3"
+    print_status 0 "Python 3 found: $(python3 --version)"
+elif command -v python &> /dev/null; then
+    PYTHON_CMD="python"
+    PYTHON_VERSION=$(python --version 2>&1)
+    if echo "$PYTHON_VERSION" | grep -q "Python 3"; then
+        print_status 0 "Python found: $PYTHON_VERSION"
+    else
+        print_error "Python 3 is required but found: $PYTHON_VERSION"
+        echo "Install: sudo yum install -y python3"
+        exit 1
+    fi
+else
+    print_error "Python 3 is not installed"
+    echo "Install: sudo yum install -y python3"
+    exit 1
+fi
+
+echo ""
 
 # Create output directory
 mkdir -p "$OUTPUT_DIR"
@@ -55,6 +86,7 @@ if $MYSQL_CMD -e "SELECT 1;" 2>/dev/null 1>/dev/null; then
     print_status 0 "MySQL connection successful"
 else
     print_status 1 "MySQL connection failed"
+    echo "Check credentials in $CONFIG_DIR/.env"
     exit 1
 fi
 
@@ -64,6 +96,11 @@ echo "----------------------"
 
 # Get list of all tables
 TABLES=$($MYSQL_CMD -N -e "SHOW TABLES;" 2>/dev/null)
+if [ $? -ne 0 ] || [ -z "$TABLES" ]; then
+    print_error "Failed to fetch table list from MySQL"
+    exit 1
+fi
+
 TABLE_COUNT=$(echo "$TABLES" | wc -l)
 
 print_info "Found $TABLE_COUNT tables in database: $MYSQL_DATABASE"
@@ -88,23 +125,29 @@ echo "Table Details:" >> "$SUMMARY_FILE"
 echo "----------------------------------------" >> "$SUMMARY_FILE"
 
 ANALYZED=0
+FAILED_TABLES=0
 
 for TABLE in $TABLES; do
     ((ANALYZED++))
     echo -ne "\rAnalyzing table $ANALYZED/$TABLE_COUNT: $TABLE                    "
 
-    # Get MySQL CREATE TABLE statement
-    $MYSQL_CMD -e "SHOW CREATE TABLE \`$TABLE\`;" > "$OUTPUT_DIR/mysql_ddl/${TABLE}.sql" 2>/dev/null || {
+    # Get MySQL CREATE TABLE statement with better error handling
+    DDL_OUTPUT=$($MYSQL_CMD -e "SHOW CREATE TABLE \`$TABLE\`;" 2>&1)
+    if [ $? -eq 0 ]; then
+        echo "$DDL_OUTPUT" > "$OUTPUT_DIR/mysql_ddl/${TABLE}.sql"
+    else
         echo -e "\n${YELLOW}Warning: Could not get DDL for table: $TABLE${NC}"
+        echo "Error: $DDL_OUTPUT" >> "$OUTPUT_DIR/failed_tables.log"
+        ((FAILED_TABLES++))
         continue
-    }
+    fi
 
-    # Get row count
-    ROW_COUNT=$($MYSQL_CMD -N -e "SELECT COUNT(*) FROM \`$TABLE\`;" 2>/dev/null || echo "0")
+    # Get row count (with timeout to avoid hanging)
+    ROW_COUNT=$(timeout 10 $MYSQL_CMD -N -e "SELECT COUNT(*) FROM \`$TABLE\`;" 2>/dev/null || echo "unknown")
 
     # Get table size
     TABLE_SIZE=$($MYSQL_CMD -N -e "
-        SELECT ROUND(((data_length + index_length) / 1024 / 1024), 2)
+        SELECT COALESCE(ROUND(((data_length + index_length) / 1024 / 1024), 2), 0)
         FROM information_schema.TABLES
         WHERE table_schema = '$MYSQL_DATABASE'
         AND table_name = '$TABLE';" 2>/dev/null || echo "0")
@@ -127,13 +170,32 @@ done
 
 echo ""
 echo ""
-print_status 0 "Analyzed $ANALYZED tables"
+
+if [ "$FAILED_TABLES" -gt 0 ]; then
+    echo -e "${YELLOW}⚠ Warning: Failed to analyze $FAILED_TABLES tables${NC}"
+    echo "  See: $OUTPUT_DIR/failed_tables.log"
+fi
+
+print_status 0 "Analyzed $((ANALYZED - FAILED_TABLES)) tables successfully"
+
+# Verify DDL files were created
+DDL_COUNT=$(ls -1 "$OUTPUT_DIR/mysql_ddl"/*.sql 2>/dev/null | wc -l)
+if [ "$DDL_COUNT" -eq 0 ]; then
+    print_error "No DDL files were created!"
+    echo "This usually means:"
+    echo "  1. MySQL SHOW CREATE TABLE command failed"
+    echo "  2. Permissions issue writing to $OUTPUT_DIR/mysql_ddl/"
+    echo "  3. All tables failed to export"
+    exit 1
+fi
+
+print_info "Created $DDL_COUNT DDL files in mysql_ddl/"
 
 echo ""
-echo "4. Generating ClickHouse DDL"
-echo "----------------------------"
+echo "4. Creating DDL Conversion Script"
+echo "----------------------------------"
 
-# Create a Python script to convert MySQL DDL to ClickHouse DDL
+# Create the Python conversion script
 cat > "$OUTPUT_DIR/convert_ddl.py" << 'PYTHON_SCRIPT'
 #!/usr/bin/env python3
 import re
@@ -220,16 +282,29 @@ def convert_mysql_type_to_clickhouse(mysql_type):
 def parse_mysql_ddl(mysql_ddl, table_name):
     """Parse MySQL CREATE TABLE and convert to ClickHouse"""
 
+    # Extract the CREATE TABLE statement from SHOW CREATE TABLE output
+    # Format: Table | Create Table
+    lines = mysql_ddl.split('\n')
+    create_statement = ""
+    for i, line in enumerate(lines):
+        if 'CREATE TABLE' in line.upper():
+            # Join all lines from this point
+            create_statement = '\n'.join(lines[i:])
+            break
+
+    if not create_statement:
+        raise Exception(f"Could not find CREATE TABLE statement in DDL for {table_name}")
+
     # Extract column definitions
     column_pattern = r'`(\w+)`\s+([^,\n]+?)(?:,|\n)'
-    columns = re.findall(column_pattern, mysql_ddl, re.MULTILINE)
+    columns = re.findall(column_pattern, create_statement, re.MULTILINE)
 
     clickhouse_columns = []
     primary_keys = []
 
     # Extract PRIMARY KEY
     pk_pattern = r'PRIMARY KEY \(`([^`]+)`\)'
-    pk_match = re.search(pk_pattern, mysql_ddl)
+    pk_match = re.search(pk_pattern, create_statement)
     if pk_match:
         primary_keys = [pk.strip() for pk in pk_match.group(1).split(',')]
 
@@ -240,6 +315,9 @@ def parse_mysql_ddl(mysql_ddl, table_name):
 
         # Parse column definition
         parts = col_def.strip().split()
+        if not parts:
+            continue
+
         mysql_type = parts[0]
 
         # Convert type
@@ -297,6 +375,9 @@ if __name__ == "__main__":
     input_dir = sys.argv[1]
     output_dir = sys.argv[2]
 
+    converted = 0
+    failed = 0
+
     # Process all SQL files in input directory
     for filename in os.listdir(input_dir):
         if filename.endswith('.sql'):
@@ -314,31 +395,61 @@ if __name__ == "__main__":
                     f.write(clickhouse_ddl)
                     f.write("\n")
 
-                print(f"Converted: {table_name}")
+                converted += 1
+                print(f"✓ Converted: {table_name}")
             except Exception as e:
-                print(f"Error converting {table_name}: {e}", file=sys.stderr)
+                failed += 1
+                print(f"✗ Error converting {table_name}: {e}", file=sys.stderr)
 
-    print(f"\nConversion complete! Check {output_dir}/")
+    print(f"\nConversion Summary:")
+    print(f"  Converted: {converted}")
+    print(f"  Failed: {failed}")
+    print(f"  Output: {output_dir}/")
+
+    sys.exit(0 if failed == 0 else 1)
 PYTHON_SCRIPT
 
 chmod +x "$OUTPUT_DIR/convert_ddl.py"
+print_status 0 "Conversion script created"
+
+echo ""
+echo "5. Generating ClickHouse DDL"
+echo "-----------------------------"
 
 # Run the conversion
-if command -v python3 &> /dev/null; then
-    python3 "$OUTPUT_DIR/convert_ddl.py" "$OUTPUT_DIR/mysql_ddl" "$OUTPUT_DIR/clickhouse_ddl"
-    print_status 0 "ClickHouse DDL generated successfully"
-elif command -v python &> /dev/null; then
-    python "$OUTPUT_DIR/convert_ddl.py" "$OUTPUT_DIR/mysql_ddl" "$OUTPUT_DIR/clickhouse_ddl"
-    print_status 0 "ClickHouse DDL generated successfully"
+$PYTHON_CMD "$OUTPUT_DIR/convert_ddl.py" "$OUTPUT_DIR/mysql_ddl" "$OUTPUT_DIR/clickhouse_ddl"
+CONVERT_EXIT=$?
+
+if [ $CONVERT_EXIT -eq 0 ]; then
+    # Verify ClickHouse DDL files were created
+    CH_DDL_COUNT=$(ls -1 "$OUTPUT_DIR/clickhouse_ddl"/*.sql 2>/dev/null | wc -l)
+
+    if [ "$CH_DDL_COUNT" -gt 0 ]; then
+        print_status 0 "Generated $CH_DDL_COUNT ClickHouse DDL files"
+    else
+        print_error "Conversion script ran but no DDL files were created!"
+        exit 1
+    fi
 else
-    print_status 1 "Python not found - cannot generate ClickHouse DDL automatically"
-    echo "  Please install Python 3 and re-run this script"
+    print_error "DDL conversion failed"
+    echo "Check errors above for details"
+    exit 1
 fi
 
 echo ""
 echo "========================================"
 echo "   Analysis Complete!"
 echo "========================================"
+echo ""
+echo "Summary:"
+echo "  Tables analyzed: $((ANALYZED - FAILED_TABLES))/$TABLE_COUNT"
+echo "  MySQL DDL files: $DDL_COUNT"
+echo "  ClickHouse DDL files: $CH_DDL_COUNT"
+
+if [ "$FAILED_TABLES" -gt 0 ]; then
+    echo -e "  ${YELLOW}Failed tables: $FAILED_TABLES${NC}"
+fi
+
 echo ""
 echo "Output files:"
 echo "  Table list:        $OUTPUT_DIR/table_list.txt"
@@ -348,3 +459,5 @@ echo "  ClickHouse DDL:    $OUTPUT_DIR/clickhouse_ddl/"
 echo ""
 echo "Next step: Run 02_create_clickhouse_schema.sh"
 echo ""
+
+exit 0
