@@ -175,8 +175,9 @@ while true; do
     echo ""
 
     # Recent errors (if any)
-    ERROR_COUNT=$(curl -s "$CONNECT_URL/connectors/mysql-source-connector/status" 2>/dev/null | grep -c '"type":"ERROR"' || echo "0")
-    if [ "$ERROR_COUNT" -gt 0 ]; then
+    ERROR_COUNT=$(curl -s "$CONNECT_URL/connectors/mysql-source-connector/status" 2>/dev/null | grep -c '"type":"ERROR"' 2>/dev/null || echo "0")
+    ERROR_COUNT=$(echo "$ERROR_COUNT" | tr -d '\n' | head -1)
+    if [ ! -z "$ERROR_COUNT" ] && [ "$ERROR_COUNT" -gt 0 ] 2>/dev/null; then
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         echo -e "  ${RED}⚠ Errors Detected: $ERROR_COUNT${NC}"
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
