@@ -140,7 +140,7 @@ else
 fi
 
 print_info "Testing Kafka Connect -> ClickHouse..."
-if docker exec kafka-connect-clickhouse nc -zv clickhouse 9000 &> /dev/null; then
+if docker exec kafka-connect-clickhouse curl -s http://clickhouse:8123/ping 2>/dev/null | grep -q "Ok"; then
     print_status 0 "Kafka Connect can reach ClickHouse"
 else
     print_status 1 "Kafka Connect cannot reach ClickHouse"
