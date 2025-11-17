@@ -1,0 +1,151 @@
+version: '3.8'
+
+services:
+  # Redpanda - Kafka-compatible streaming platform
+  redpanda:
+    image: docker.redpanda.com/redpandadata/redpanda:v23.3.3
+    container_name: redpanda-clickhouse
+    command:
+      - redpanda
+      - start
+      - --kafka-addr internal://0.0.0.0:9092,external://0.0.0.0:19092
+      - --advertise-kafka-addr internal://redpanda:9092,external://localhost:9093
+      - --pandaproxy-addr internal://0.0.0.0:8082,external://0.0.0.0:18082
+      - --advertise-pandaproxy-addr internal://redpanda:8082,external://localhost:8082
+      - --schema-registry-addr internal://0.0.0.0:8081,external://0.0.0.0:18081
+      - --rpc-addr redpanda:33145
+      - --advertise-rpc-addr redpanda:33145
+      - --smp 1
+      - --memory 1G
+      - --mode dev-container
+      - --default-log-level=info
+    ports:
+      - "9093:19092"    # Kafka API (external) - changed to avoid conflict
+      - "8081:18081"    # Schema Registry (external)
+      - "8082:18082"    # HTTP Proxy (external)
+      - "9644:9644"     # Admin API
+    volumes:
+      - redpanda_data:/var/lib/redpanda/data
+    networks:
+      - clickhouse-network
+    healthcheck:
+      test: ["CMD-SHELL", "rpk cluster health | grep -E 'Healthy:.+true' || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  # Redpanda Console - Web UI for Kafka
+  redpanda-console:
+    image: docker.redpanda.com/redpandadata/console:v2.4.0
+    container_name: redpanda-console-clickhouse
+    entrypoint: /bin/sh
+    command: -c 'echo "$$CONSOLE_CONFIG_FILE" > /tmp/config.yml; /app/console'
+    environment:
+      CONFIG_FILEPATH: /tmp/config.yml
+      CONSOLE_CONFIG_FILE: |
+        kafka:
+          brokers: ["redpanda:9092"]
+          schemaRegistry:
+            enabled: true
+            urls: ["http://redpanda:8081"]
+        connect:
+          enabled: true
+          clusters:
+            - name: kafka-connect
+              url: http://kafka-connect:8083
+    ports:
+      - "8086:8080"    # Console UI - changed to avoid conflict
+    networks:
+      - clickhouse-network
+    depends_on:
+      redpanda:
+        condition: service_healthy
+
+  # Kafka Connect - Debezium + ClickHouse Sink
+  kafka-connect:
+    image: debezium/connect:2.5
+    container_name: kafka-connect-clickhouse
+    ports:
+      - "8085:8083"    # REST API - changed to avoid conflict
+    environment:
+      BOOTSTRAP_SERVERS: redpanda:9092
+      GROUP_ID: clickhouse-cdc-connect-cluster
+      CONFIG_STORAGE_TOPIC: clickhouse_connect_configs
+      OFFSET_STORAGE_TOPIC: clickhouse_connect_offsets
+      STATUS_STORAGE_TOPIC: clickhouse_connect_status
+
+      # Replication factors (1 for single-node Redpanda)
+      CONFIG_STORAGE_REPLICATION_FACTOR: 1
+      OFFSET_STORAGE_REPLICATION_FACTOR: 1
+      STATUS_STORAGE_REPLICATION_FACTOR: 1
+
+      # Connector settings
+      CONNECT_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_KEY_CONVERTER_SCHEMAS_ENABLE: "false"
+      CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
+
+      # Plugin path
+      CONNECT_PLUGIN_PATH: /kafka/connect,/debezium/connectors
+
+      # Logging
+      CONNECT_LOG4J_ROOT_LOGLEVEL: INFO
+      CONNECT_LOG4J_LOGGERS: org.apache.kafka.connect=INFO,io.debezium=INFO
+
+    volumes:
+      - ./configs/clickhouse-sink:/kafka/connect/clickhouse-sink
+    networks:
+      - clickhouse-network
+    depends_on:
+      redpanda:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8083/ || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  # ClickHouse - Analytical Database
+  clickhouse:
+    image: clickhouse/clickhouse-server:23.12-alpine
+    container_name: clickhouse-server
+    ports:
+      - "9000:9000"    # Native protocol
+      - "8123:8123"    # HTTP interface
+    environment:
+      CLICKHOUSE_DB: analytics
+      CLICKHOUSE_USER: ${CLICKHOUSE_USER:-default}
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD:-ClickHouse_Secure_Pass_2024!}
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+      - clickhouse_logs:/var/log/clickhouse-server
+      - ./configs/clickhouse/users.xml:/etc/clickhouse-server/users.d/custom_users.xml
+      - ./configs/clickhouse/config.xml:/etc/clickhouse-server/config.d/custom_config.xml
+    networks:
+      - clickhouse-network
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8123/ping || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  redpanda_data:
+    driver: local
+  clickhouse_data:
+    driver: local
+  clickhouse_logs:
+    driver: local
+
+networks:
+  clickhouse-network:
+    driver: bridge
+    name: clickhouse-cdc-network
