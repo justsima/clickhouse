@@ -1,0 +1,36 @@
+{
+  "name": "clickhouse-sink-connector",
+  "config": {
+    "connector.class": "com.clickhouse.kafka.connect.ClickHouseSinkConnector",
+    "tasks.max": "4",
+
+    "topics.regex": "mysql\\.${MYSQL_DATABASE}\\..*",
+
+    "hostname": "${CLICKHOUSE_HOST}",
+    "port": "${CLICKHOUSE_PORT}",
+    "database": "${CLICKHOUSE_DATABASE}",
+    "username": "${CLICKHOUSE_USER}",
+    "password": "${CLICKHOUSE_PASSWORD}",
+
+    "ssl": "false",
+
+    "exactlyOnce": "false",
+    "bufferCount": "50000",
+    "flushInterval": "30",
+
+    "errors.retry.timeout": "60",
+    "errors.tolerance": "all",
+    "errors.log.enable": "true",
+    "errors.log.include.messages": "true",
+    "errors.deadletterqueue.topic.name": "clickhouse-dlq",
+    "errors.deadletterqueue.topic.replication.factor": "1",
+    "errors.deadletterqueue.context.headers.enable": "true",
+
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": "false",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false",
+
+    "tableMapping": "auto"
+  }
+}
