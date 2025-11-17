@@ -108,9 +108,18 @@ else
 
             print_info "Restarting Kafka Connect to load JDBC driver..."
             docker restart kafka-connect-clickhouse >/dev/null 2>&1
-            sleep 30
 
-            print_status 0 "Kafka Connect restarted"
+            # Wait for Kafka Connect to be ready
+            print_info "Waiting for Kafka Connect to initialize..."
+            for i in {1..12}; do
+                if curl -s "$CONNECT_URL/" | grep -q "version"; then
+                    print_status 0 "Kafka Connect restarted and ready"
+                    break
+                fi
+                echo -n "."
+                sleep 5
+            done
+            echo ""
         else
             print_error "Downloaded file is too small ($FILESIZE bytes) - download failed"
             exit 1
@@ -125,8 +134,22 @@ echo ""
 echo "3. Verifying Available Connectors"
 echo "-----------------------------------"
 
-# List available connectors
-CONNECTORS=$(curl -s "$CONNECT_URL/connector-plugins" | grep -o '"class":"[^"]*"' | cut -d'"' -f4)
+# List available connectors with retry
+CONNECTORS=""
+for attempt in {1..5}; do
+    CONNECTORS=$(curl -s "$CONNECT_URL/connector-plugins" 2>/dev/null | grep -o '"class":"[^"]*"' | cut -d'"' -f4)
+    if [ -n "$CONNECTORS" ]; then
+        break
+    fi
+    echo "Waiting for connector plugins to load (attempt $attempt/5)..."
+    sleep 3
+done
+
+if [ -z "$CONNECTORS" ]; then
+    print_error "Could not retrieve connector plugins from Kafka Connect"
+    echo "Try manually: curl http://localhost:8085/connector-plugins"
+    exit 1
+fi
 
 print_info "Available connector plugins:"
 echo "$CONNECTORS" | grep -E "(MySql|Jdbc)" | sed 's/^/  - /'
@@ -136,6 +159,8 @@ if echo "$CONNECTORS" | grep -q "io.debezium.connector.mysql.MySqlConnector"; th
     print_status 0 "Debezium MySQL connector available"
 else
     print_error "Debezium MySQL connector not found"
+    echo "Available connectors:"
+    echo "$CONNECTORS"
     exit 1
 fi
 
@@ -143,6 +168,8 @@ if echo "$CONNECTORS" | grep -q "io.debezium.connector.jdbc.JdbcSinkConnector"; 
     print_status 0 "Debezium JDBC Sink connector available"
 else
     print_error "Debezium JDBC Sink connector not found"
+    echo "Available connectors:"
+    echo "$CONNECTORS"
     exit 1
 fi
 
