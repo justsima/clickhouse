@@ -1,0 +1,16 @@
+# Environment files
+configs/.env
+
+# Generated schema output
+schema_output/
+
+# Validation output
+validation_output/
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.swp
+*~
