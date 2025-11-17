@@ -92,15 +92,21 @@ fi
 
 # ClickHouse health
 print_info "Checking ClickHouse..."
+# Read password from .env file or use default
+CLICKHOUSE_PASSWORD=${CLICKHOUSE_PASSWORD:-ClickHouse_Secure_Pass_2024!}
+if [ -f "$PHASE2_DIR/configs/.env" ]; then
+    source "$PHASE2_DIR/configs/.env"
+fi
+
 if curl -s http://localhost:8123/ping | grep -q "Ok"; then
     print_status 0 "ClickHouse is responding"
 
-    # Get ClickHouse version
-    CH_VERSION=$(curl -s 'http://localhost:8123/?query=SELECT%20version()' 2>/dev/null || echo "unknown")
+    # Get ClickHouse version (with authentication)
+    CH_VERSION=$(curl -s -u "default:${CLICKHOUSE_PASSWORD}" 'http://localhost:8123/?query=SELECT%20version()' 2>/dev/null || echo "unknown")
     echo "  ClickHouse version: $CH_VERSION"
 
-    # Check database
-    DB_CHECK=$(curl -s 'http://localhost:8123/?query=SHOW%20DATABASES' 2>/dev/null || echo "")
+    # Check database (with authentication)
+    DB_CHECK=$(curl -s -u "default:${CLICKHOUSE_PASSWORD}" 'http://localhost:8123/?query=SHOW%20DATABASES' 2>/dev/null || echo "")
     if echo "$DB_CHECK" | grep -q "analytics"; then
         print_status 0 "Analytics database exists"
     else
@@ -134,7 +140,7 @@ else
 fi
 
 print_info "Testing Kafka Connect -> ClickHouse..."
-if docker exec kafka-connect-clickhouse nc -zv clickhouse 9000 &> /dev/null; then
+if docker exec kafka-connect-clickhouse curl -s http://clickhouse:8123/ping 2>/dev/null | grep -q "Ok"; then
     print_status 0 "Kafka Connect can reach ClickHouse"
 else
     print_status 1 "Kafka Connect cannot reach ClickHouse"
