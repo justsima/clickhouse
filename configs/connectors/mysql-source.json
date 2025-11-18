@@ -1,0 +1,48 @@
+{
+  "name": "mysql-source-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.mysql.MySqlConnector",
+    "tasks.max": "1",
+
+    "database.hostname": "${MYSQL_HOST}",
+    "database.port": "${MYSQL_PORT}",
+    "database.user": "${MYSQL_USER}",
+    "database.password": "${MYSQL_PASSWORD}",
+    "database.server.id": "184054",
+    "database.server.name": "mysql",
+
+    "database.include.list": "${MYSQL_DATABASE}",
+    "table.include.list": "${MYSQL_DATABASE}.*",
+
+    "topic.prefix": "mysql",
+
+    "snapshot.mode": "initial_only",
+    "snapshot.locking.mode": "none",
+
+    "schema.history.internal.kafka.bootstrap.servers": "redpanda:9092",
+    "schema.history.internal.kafka.topic": "schema-changes.mysql",
+
+    "include.schema.changes": "false",
+    "include.query": "false",
+
+    "time.precision.mode": "connect",
+    "decimal.handling.mode": "double",
+    "bigint.unsigned.handling.mode": "long",
+
+    "tombstones.on.delete": "false",
+    "transforms": "unwrap",
+    "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+    "transforms.unwrap.drop.tombstones": "false",
+    "transforms.unwrap.delete.handling.mode": "rewrite",
+    "transforms.unwrap.add.fields": "op,source.ts_ms",
+
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": "false",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false",
+
+    "errors.tolerance": "all",
+    "errors.log.enable": "true",
+    "errors.log.include.messages": "true"
+  }
+}
