@@ -91,7 +91,7 @@ services:
 
       # Logging
       CONNECT_LOG4J_ROOT_LOGLEVEL: INFO
-      CONNECT_LOG4J_LOGGERS: org.apache.kafka.connect=INFO,io.debezium=INFO
+      CONNECT_LOG4J_LOGGERS: org.apache.kafka.connect.runtime.rest=WARN,org.reflections=ERROR
 
     volumes:
       - ./configs/clickhouse-sink:/kafka/connect/clickhouse-sink
