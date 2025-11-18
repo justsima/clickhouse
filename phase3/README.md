@@ -7,14 +7,17 @@ This phase implements the complete data replication pipeline from MySQL to Click
 - **Redpanda (Kafka)** as the message broker
 - **ClickHouse** as the analytical database
 
-## Current Mode: SNAPSHOT ONLY
+## Current Mode: FULL CDC (Real-Time Streaming)
 
-This implementation uses **snapshot-only mode** which:
-- ✅ Copies all existing data from MySQL to ClickHouse
-- ✅ Works WITHOUT MySQL replication privileges
-- ❌ Does NOT provide real-time CDC (yet)
+This implementation uses **full CDC mode** which:
+- ✅ Copies all existing data from MySQL to ClickHouse (initial snapshot)
+- ✅ Provides **real-time CDC** for continuous data streaming
+- ✅ Captures INSERT, UPDATE, DELETE operations as they happen
+- ✅ Requires MySQL replication privileges (REPLICATION SLAVE/CLIENT)
 
-**When you get MySQL replication privileges**, we'll switch to full CDC mode for real-time sync.
+**The pipeline will**:
+1. First perform an initial snapshot of all existing data
+2. Then continuously stream changes from MySQL binlog in real-time
 
 ---
 
