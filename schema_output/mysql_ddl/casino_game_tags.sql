@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+casino_game_tags	CREATE TABLE "casino_game_tags" (\n  "id" int NOT NULL AUTO_INCREMENT,\n  "game_id" char(32) NOT NULL,\n  "tag_id" char(32) NOT NULL,\n  PRIMARY KEY ("id"),\n  UNIQUE KEY "casino_game_tags_game_id_tag_id_8780f168_uniq" ("game_id","tag_id"),\n  KEY "casino_game_tags_tag_id_159eca67_fk_casino_tag_id" ("tag_id"),\n  CONSTRAINT "casino_game_tags_game_id_8ce73132_fk_casino_game_id" FOREIGN KEY ("game_id") REFERENCES "casino_game" ("id"),\n  CONSTRAINT "casino_game_tags_tag_id_159eca67_fk_casino_tag_id" FOREIGN KEY ("tag_id") REFERENCES "casino_tag" ("id")\n)

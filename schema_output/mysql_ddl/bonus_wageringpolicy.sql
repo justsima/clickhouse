@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+bonus_wageringpolicy	CREATE TABLE "bonus_wageringpolicy" (\n  "id" char(32) NOT NULL,\n  "min_stake" double DEFAULT NULL,\n  "min_total_odd" double DEFAULT NULL,\n  "min_individual_odd" double DEFAULT NULL,\n  "min_number_of_matches" int DEFAULT NULL,\n  "max_contribution_amount" double DEFAULT NULL,\n  "max_contribution_type" int NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "title" varchar(100) NOT NULL,\n  "min_individual_odd_eligibility_criteria" int NOT NULL,\n  "max_payout" double DEFAULT NULL,\n  "min_deposit_amount" double DEFAULT NULL,\n  "contribution_tracking_source" int NOT NULL,\n  PRIMARY KEY ("id")\n)

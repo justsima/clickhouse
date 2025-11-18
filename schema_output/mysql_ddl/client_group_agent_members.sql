@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+client_group_agent_members	CREATE TABLE "client_group_agent_members" (\n  "id" int NOT NULL AUTO_INCREMENT,\n  "group_id" int NOT NULL,\n  "agent_id" int NOT NULL,\n  PRIMARY KEY ("id"),\n  UNIQUE KEY "client_group_agent_members_group_id_agent_id_f6f63058_uniq" ("group_id","agent_id"),\n  KEY "client_group_agent_members_agent_id_651078aa_fk_flatodd_agent_id" ("agent_id"),\n  CONSTRAINT "client_group_agent_members_agent_id_651078aa_fk_flatodd_agent_id" FOREIGN KEY ("agent_id") REFERENCES "flatodd_agent" ("id"),\n  CONSTRAINT "client_group_agent_members_group_id_8572f489_fk_client_group_id" FOREIGN KEY ("group_id") REFERENCES "client_group" ("id")\n)

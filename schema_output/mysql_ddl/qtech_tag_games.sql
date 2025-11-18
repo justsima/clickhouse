@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+qtech_tag_games	CREATE TABLE "qtech_tag_games" (\n  "id" int NOT NULL AUTO_INCREMENT,\n  "tag_id" bigint NOT NULL,\n  "game_id" bigint NOT NULL,\n  PRIMARY KEY ("id"),\n  UNIQUE KEY "qtech_tag_games_tag_id_game_id_928e7a1a_uniq" ("tag_id","game_id"),\n  KEY "qtech_tag_games_game_id_f3454cc5_fk_qtech_game_id" ("game_id"),\n  CONSTRAINT "qtech_tag_games_game_id_f3454cc5_fk_qtech_game_id" FOREIGN KEY ("game_id") REFERENCES "qtech_game" ("id"),\n  CONSTRAINT "qtech_tag_games_tag_id_62b2bf94_fk_qtech_tag_id" FOREIGN KEY ("tag_id") REFERENCES "qtech_tag" ("id")\n)

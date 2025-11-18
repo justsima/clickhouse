@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+hulusport_hulutransaction	CREATE TABLE "hulusport_hulutransaction" (\n  "id" int NOT NULL AUTO_INCREMENT,\n  "transaction_id" varchar(30) NOT NULL,\n  "amount" varchar(30) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "user_id" int NOT NULL,\n  PRIMARY KEY ("id"),\n  KEY "hulusport_hulutransaction_transaction_id_69e4bffd" ("transaction_id"),\n  KEY "hulusport_hulutransa_user_id_0927c03e_fk_hulusport" ("user_id"),\n  CONSTRAINT "hulusport_hulutransa_user_id_0927c03e_fk_hulusport" FOREIGN KEY ("user_id") REFERENCES "hulusport_hulusportuser" ("id")\n)

@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+onlineagent_config	CREATE TABLE "onlineagent_config" (\n  "configuration_ptr_id" int NOT NULL,\n  "commission_calculator" smallint unsigned NOT NULL,\n  "daily_per_user_deposit_amount" double DEFAULT NULL,\n  "daily_per_user_deposit_count" int DEFAULT NULL,\n  PRIMARY KEY ("configuration_ptr_id"),\n  CONSTRAINT "onlineagent_config_configuration_ptr_id_29345b36_fk_flatodd_c" FOREIGN KEY ("configuration_ptr_id") REFERENCES "flatodd_configuration" ("id"),\n  CONSTRAINT "onlineagent_config_chk_1" CHECK ((`commission_calculator` >= 0))\n)

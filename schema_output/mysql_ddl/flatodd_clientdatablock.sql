@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+flatodd_clientdatablock	CREATE TABLE "flatodd_clientdatablock" (\n  "id" int NOT NULL AUTO_INCREMENT,\n  "month" int NOT NULL,\n  "year" int NOT NULL,\n  "percentage" decimal(5,4) NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "client_id" int NOT NULL,\n  PRIMARY KEY ("id"),\n  UNIQUE KEY "flatodd_clientdatablock_month_year_87ca1f5c_uniq" ("month","year"),\n  KEY "flatodd_clientdatablock_client_id_3ad793c5_fk_flatodd_client_id" ("client_id"),\n  CONSTRAINT "flatodd_clientdatablock_client_id_3ad793c5_fk_flatodd_client_id" FOREIGN KEY ("client_id") REFERENCES "flatodd_client" ("id")\n)

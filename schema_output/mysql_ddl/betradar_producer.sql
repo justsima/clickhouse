@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+betradar_producer	CREATE TABLE "betradar_producer" (\n  "id" bigint NOT NULL AUTO_INCREMENT,\n  "producer_type" smallint unsigned NOT NULL,\n  "state" smallint unsigned NOT NULL,\n  "last_alive_message_timestamp" datetime(6) NOT NULL,\n  "last_synched_on" datetime(6) NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "down_tolerance" int NOT NULL,\n  "last_synched_on_tolerance" int NOT NULL,\n  PRIMARY KEY ("id"),\n  UNIQUE KEY "producer_type" ("producer_type"),\n  CONSTRAINT "betradar_producer_chk_1" CHECK ((`producer_type` >= 0)),\n  CONSTRAINT "betradar_producer_chk_2" CHECK ((`state` >= 0))\n)

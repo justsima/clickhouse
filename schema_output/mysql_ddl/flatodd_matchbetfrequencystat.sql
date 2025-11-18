@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+flatodd_matchbetfrequencystat	CREATE TABLE "flatodd_matchbetfrequencystat" (\n  "id" int NOT NULL AUTO_INCREMENT,\n  "hour_resolution" datetime(6) NOT NULL,\n  "total_stake" decimal(10,2) NOT NULL,\n  "frequency" int NOT NULL,\n  "bet_action_type" int NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "match_id" int NOT NULL,\n  PRIMARY KEY ("id"),\n  UNIQUE KEY "flatodd_matchbetfrequenc_match_id_bet_action_type_9a5c286c_uniq" ("match_id","bet_action_type","hour_resolution"),\n  CONSTRAINT "flatodd_matchbetfreq_match_id_30379704_fk_flatodd_m" FOREIGN KEY ("match_id") REFERENCES "flatodd_match" ("id")\n)

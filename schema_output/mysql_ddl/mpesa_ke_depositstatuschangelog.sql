@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+mpesa_ke_depositstatuschangelog	CREATE TABLE "mpesa_ke_depositstatuschangelog" (\n  "id" bigint NOT NULL AUTO_INCREMENT,\n  "status" smallint unsigned NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "payment_request_id" bigint NOT NULL,\n  PRIMARY KEY ("id"),\n  KEY "mpesa_ke_depositstat_payment_request_id_66953ebb_fk_mpesa_ke_" ("payment_request_id"),\n  CONSTRAINT "mpesa_ke_depositstat_payment_request_id_66953ebb_fk_mpesa_ke_" FOREIGN KEY ("payment_request_id") REFERENCES "mpesa_ke_depositpaymentrequest" ("id"),\n  CONSTRAINT "mpesa_ke_depositstatuschangelog_chk_1" CHECK ((`status` >= 0))\n)

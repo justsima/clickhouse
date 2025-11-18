@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+kra_taxremittancejob	CREATE TABLE "kra_taxremittancejob" (\n  "id" bigint NOT NULL AUTO_INCREMENT,\n  "tax_start_date" date NOT NULL,\n  "tax_end_date" date NOT NULL,\n  "failed" tinyint(1) NOT NULL,\n  "messages" longtext,\n  "prn_payload" json DEFAULT NULL,\n  "started_at" datetime(6) DEFAULT NULL,\n  "finished_at" datetime(6) DEFAULT NULL,\n  "job_id" char(32) NOT NULL,\n  "tax_type" varchar(50) NOT NULL,\n  "job_status" varchar(50) NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  PRIMARY KEY ("id"),\n  UNIQUE KEY "job_id" ("job_id")\n)

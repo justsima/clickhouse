@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+santimpay_santimpayconfiguration	CREATE TABLE "santimpay_santimpayconfiguration" (\n  "configuration_ptr_id" int NOT NULL,\n  "merchant_id" varchar(75) DEFAULT NULL,\n  "base_url" varchar(200) DEFAULT NULL,\n  "site_id" varchar(75) DEFAULT NULL,\n  "gateway_token" varchar(500) DEFAULT NULL,\n  "private_key" varchar(500) DEFAULT NULL,\n  PRIMARY KEY ("configuration_ptr_id"),\n  CONSTRAINT "santimpay_santimpayc_configuration_ptr_id_f67e3a39_fk_flatodd_c" FOREIGN KEY ("configuration_ptr_id") REFERENCES "flatodd_configuration" ("id")\n)

@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+tournament_tournament	CREATE TABLE "tournament_tournament" (\n  "id" char(32) NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "status" int NOT NULL,\n  "start_date" datetime(6) NOT NULL,\n  "end_date" datetime(6) NOT NULL,\n  "campaign_id" char(32) NOT NULL,\n  PRIMARY KEY ("id"),\n  KEY "tournament__created_9cb04d_idx" ("created_at"),\n  KEY "tournament__start_d_ee0ce1_idx" ("start_date","end_date"),\n  KEY "tournament_tournamen_campaign_id_8f36ed66_fk_tournamen" ("campaign_id"),\n  CONSTRAINT "tournament_tournamen_campaign_id_8f36ed66_fk_tournamen" FOREIGN KEY ("campaign_id") REFERENCES "tournament_campaign" ("id")\n)

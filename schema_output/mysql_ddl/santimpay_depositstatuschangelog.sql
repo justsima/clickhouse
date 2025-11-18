@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+santimpay_depositstatuschangelog	CREATE TABLE "santimpay_depositstatuschangelog" (\n  "statuschangelog_ptr_id" bigint NOT NULL,\n  "payment_request_id" bigint NOT NULL,\n  PRIMARY KEY ("statuschangelog_ptr_id"),\n  KEY "santimpay_depositsta_payment_request_id_cc7ea194_fk_santimpay" ("payment_request_id"),\n  CONSTRAINT "santimpay_depositsta_payment_request_id_cc7ea194_fk_santimpay" FOREIGN KEY ("payment_request_id") REFERENCES "santimpay_depositpaymentrequest" ("id"),\n  CONSTRAINT "santimpay_depositsta_statuschangelog_ptr__9e144917_fk_santimpay" FOREIGN KEY ("statuschangelog_ptr_id") REFERENCES "santimpay_statuschangelog" ("id")\n)

@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+flatodd_branchoddbasedstakelimitconfig	CREATE TABLE "flatodd_branchoddbasedstakelimitconfig" (\n  "id" int NOT NULL AUTO_INCREMENT,\n  "min_odd" double DEFAULT NULL,\n  "max_odd" double DEFAULT NULL,\n  "allowed_max_stake" double NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "branch_id" int NOT NULL,\n  PRIMARY KEY ("id"),\n  KEY "flatodd_branchoddbas_branch_id_83440af3_fk_flatodd_b" ("branch_id"),\n  CONSTRAINT "flatodd_branchoddbas_branch_id_83440af3_fk_flatodd_b" FOREIGN KEY ("branch_id") REFERENCES "flatodd_branch" ("id")\n)

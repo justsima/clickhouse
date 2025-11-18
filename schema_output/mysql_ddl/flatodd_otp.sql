@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+flatodd_otp	CREATE TABLE "flatodd_otp" (\n  "id" int NOT NULL AUTO_INCREMENT,\n  "code" varchar(10) NOT NULL,\n  "unique_id" char(32) NOT NULL,\n  "confirmation_id" char(32) NOT NULL,\n  "otp_type" smallint unsigned NOT NULL,\n  "otp_sent_to" varchar(15) NOT NULL,\n  "expires_in" bigint DEFAULT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "state" smallint unsigned NOT NULL,\n  PRIMARY KEY ("id"),\n  CONSTRAINT "flatodd_otp_chk_1" CHECK ((`otp_type` >= 0)),\n  CONSTRAINT "flatodd_otp_chk_2" CHECK ((`state` >= 0))\n)

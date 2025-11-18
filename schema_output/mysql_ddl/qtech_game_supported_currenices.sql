@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+qtech_game_supported_currenices	CREATE TABLE "qtech_game_supported_currenices" (\n  "id" int NOT NULL AUTO_INCREMENT,\n  "game_id" bigint NOT NULL,\n  "currency_id" bigint NOT NULL,\n  PRIMARY KEY ("id"),\n  UNIQUE KEY "qtech_game_supported_cur_game_id_currency_id_cc60c07b_uniq" ("game_id","currency_id"),\n  KEY "qtech_game_supported_currency_id_cd93c6fc_fk_qtech_cur" ("currency_id"),\n  CONSTRAINT "qtech_game_supported_currency_id_cd93c6fc_fk_qtech_cur" FOREIGN KEY ("currency_id") REFERENCES "qtech_currency" ("id"),\n  CONSTRAINT "qtech_game_supported_game_id_20267e03_fk_qtech_gam" FOREIGN KEY ("game_id") REFERENCES "qtech_game" ("id")\n)

@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+unipesa_unipesaconfiguration	CREATE TABLE "unipesa_unipesaconfiguration" (\n  "configuration_ptr_id" int NOT NULL,\n  "base_url" varchar(200) NOT NULL,\n  "public_id" varchar(50) NOT NULL,\n  "merchant_id" varchar(50) NOT NULL,\n  "secret_key" varchar(150) NOT NULL,\n  "deposit_callback_url" varchar(200) DEFAULT NULL,\n  "withdraw_callback_url" varchar(200) DEFAULT NULL,\n  PRIMARY KEY ("configuration_ptr_id"),\n  CONSTRAINT "unipesa_unipesaconfi_configuration_ptr_id_931e6e50_fk_flatodd_c" FOREIGN KEY ("configuration_ptr_id") REFERENCES "flatodd_configuration" ("id")\n)

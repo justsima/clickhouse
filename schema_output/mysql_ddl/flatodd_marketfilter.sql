@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+flatodd_marketfilter	CREATE TABLE "flatodd_marketfilter" (\n  "id" int NOT NULL AUTO_INCREMENT,\n  "bet_group_id" int NOT NULL,\n  "is_locked" tinyint(1) NOT NULL,\n  "filter_type" smallint unsigned NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  PRIMARY KEY ("id"),\n  KEY "flatodd_marketfilter_bet_group_id_55b7e985" ("bet_group_id"),\n  CONSTRAINT "flatodd_marketfilter_bet_group_id_55b7e985_fk_flatodd_b" FOREIGN KEY ("bet_group_id") REFERENCES "flatodd_betgroup" ("id"),\n  CONSTRAINT "flatodd_marketfilter_chk_1" CHECK ((`filter_type` >= 0))\n)

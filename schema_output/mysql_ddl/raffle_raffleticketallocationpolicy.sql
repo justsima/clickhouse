@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+raffle_raffleticketallocationpolicy	CREATE TABLE "raffle_raffleticketallocationpolicy" (\n  "id" bigint NOT NULL AUTO_INCREMENT,\n  "policy" varchar(15) NOT NULL,\n  "min_deposit_amount" decimal(10,2) DEFAULT NULL,\n  "min_casino_bet_amount" decimal(10,2) DEFAULT NULL,\n  "min_sportsbook_bet_amount" decimal(10,2) DEFAULT NULL,\n  "max_tickets_per_event" int unsigned NOT NULL,\n  "on_deposit_enabled" tinyint(1) NOT NULL,\n  "on_casino_bet_enabled" tinyint(1) NOT NULL,\n  "on_sportsbook_bet_enabled" tinyint(1) NOT NULL,\n  PRIMARY KEY ("id"),\n  CONSTRAINT "raffle_raffleticketallocationpolicy_chk_1" CHECK ((`max_tickets_per_event` >= 0))\n)

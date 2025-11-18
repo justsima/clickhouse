@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+client_useragentinformation	CREATE TABLE "client_useragentinformation" (\n  "id" int NOT NULL AUTO_INCREMENT,\n  "browser" varchar(150) NOT NULL,\n  "os" varchar(150) NOT NULL,\n  "device_info" varchar(150) NOT NULL,\n  "device_type" varchar(150) NOT NULL,\n  "remote_addr" varchar(150) NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "user_id" int NOT NULL,\n  PRIMARY KEY ("id"),\n  KEY "client_useragentinfo_user_id_bb0466f6_fk_flatodd_c" ("user_id"),\n  CONSTRAINT "client_useragentinfo_user_id_bb0466f6_fk_flatodd_c" FOREIGN KEY ("user_id") REFERENCES "flatodd_client" ("id")\n)

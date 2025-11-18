@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+agent_prepaidbetwalletchangelog	CREATE TABLE "agent_prepaidbetwalletchangelog" (\n  "id" int NOT NULL AUTO_INCREMENT,\n  "current_value" double NOT NULL,\n  "prev_value" double NOT NULL,\n  "value_type" smallint unsigned NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "updated_by_id" int NOT NULL,\n  PRIMARY KEY ("id"),\n  KEY "agent_prepaidbetwall_updated_by_id_aeb2cea5_fk_auth_user" ("updated_by_id"),\n  CONSTRAINT "agent_prepaidbetwall_updated_by_id_aeb2cea5_fk_auth_user" FOREIGN KEY ("updated_by_id") REFERENCES "auth_user" ("id"),\n  CONSTRAINT "agent_prepaidbetwalletchangelog_chk_1" CHECK ((`value_type` >= 0))\n)

@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+cms_ug_playergamesummary	CREATE TABLE "cms_ug_playergamesummary" (\n  "id" bigint NOT NULL AUTO_INCREMENT,\n  "player_id" int NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "game_id" bigint NOT NULL,\n  "activity_date" date NOT NULL,\n  PRIMARY KEY ("id"),\n  UNIQUE KEY "cms_ug_playergamesummary_player_id_game_id_activi_879a46ef_uniq" ("player_id","game_id","activity_date"),\n  KEY "cms_ug_playergamesummary_game_id_a66fd41e_fk_cms_ug_game_id" ("game_id"),\n  CONSTRAINT "cms_ug_playergamesummary_game_id_a66fd41e_fk_cms_ug_game_id" FOREIGN KEY ("game_id") REFERENCES "cms_ug_game" ("id")\n)

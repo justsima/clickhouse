@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+flatodd_offlinecoupon	CREATE TABLE "flatodd_offlinecoupon" (\n  "id" int NOT NULL AUTO_INCREMENT,\n  "stake" double NOT NULL,\n  "possible_win" double NOT NULL,\n  "couponID" varchar(40) NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "printed" tinyint(1) NOT NULL,\n  "channel" varchar(10) NOT NULL,\n  "printed_at" datetime(6) DEFAULT NULL,\n  "compatability" smallint unsigned NOT NULL,\n  PRIMARY KEY ("id"),\n  UNIQUE KEY "couponID" ("couponID"),\n  CONSTRAINT "flatodd_offlinecoupon_chk_1" CHECK ((`compatability` >= 0))\n)

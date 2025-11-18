@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+emali_withdrawstatuschangelog	CREATE TABLE "emali_withdrawstatuschangelog" (\n  "id" bigint NOT NULL AUTO_INCREMENT,\n  "status" smallint unsigned NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "payment_request_id" bigint NOT NULL,\n  PRIMARY KEY ("id"),\n  KEY "emali_withdrawstatus_payment_request_id_f26c3c52_fk_emali_wit" ("payment_request_id"),\n  CONSTRAINT "emali_withdrawstatus_payment_request_id_f26c3c52_fk_emali_wit" FOREIGN KEY ("payment_request_id") REFERENCES "emali_withdrawpaymentrequest" ("id"),\n  CONSTRAINT "emali_withdrawstatuschangelog_chk_1" CHECK ((`status` >= 0))\n)

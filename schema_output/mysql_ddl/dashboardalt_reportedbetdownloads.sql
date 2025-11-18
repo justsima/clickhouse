@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+dashboardalt_reportedbetdownloads	CREATE TABLE "dashboardalt_reportedbetdownloads" (\n  "id" bigint NOT NULL AUTO_INCREMENT,\n  "filters" json NOT NULL,\n  "field_names" varchar(3000) NOT NULL,\n  "csv_file_path" varchar(3000) DEFAULT NULL,\n  "download_id" char(32) NOT NULL,\n  "download_status" varchar(50) NOT NULL,\n  "started_at" datetime(6) DEFAULT NULL,\n  "finished_at" datetime(6) DEFAULT NULL,\n  "messages" longtext,\n  "failed" tinyint(1) NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "file_name" varchar(200) DEFAULT NULL,\n  PRIMARY KEY ("id"),\n  UNIQUE KEY "download_id" ("download_id")\n)

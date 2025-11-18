@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+paytota_depositstatuschangelog	CREATE TABLE "paytota_depositstatuschangelog" (\n  "id" bigint NOT NULL AUTO_INCREMENT,\n  "status" smallint unsigned NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "payment_request_id" bigint NOT NULL,\n  PRIMARY KEY ("id"),\n  KEY "paytota_depositstatu_payment_request_id_71336a60_fk_paytota_d" ("payment_request_id"),\n  CONSTRAINT "paytota_depositstatu_payment_request_id_71336a60_fk_paytota_d" FOREIGN KEY ("payment_request_id") REFERENCES "paytota_depositpaymentrequest" ("id"),\n  CONSTRAINT "paytota_depositstatuschangelog_chk_1" CHECK ((`status` >= 0))\n)

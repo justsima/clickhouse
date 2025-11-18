@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+dashboardalt_importedreportedmonthlybet	CREATE TABLE "dashboardalt_importedreportedmonthlybet" (\n  "id" bigint NOT NULL AUTO_INCREMENT,\n  "bet_date" date NOT NULL,\n  "before_tax" double NOT NULL,\n  "tax" double NOT NULL,\n  "total" double NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "branch_id" int NOT NULL,\n  PRIMARY KEY ("id"),\n  UNIQUE KEY "dashboardalt_importedrep_branch_id_bet_date_02ee0398_uniq" ("branch_id","bet_date"),\n  CONSTRAINT "dashboardalt_importe_branch_id_4ddad986_fk_flatodd_b" FOREIGN KEY ("branch_id") REFERENCES "flatodd_branch" ("id")\n)

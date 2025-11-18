@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+mpesa_et_withdrawstatuschangelog	CREATE TABLE "mpesa_et_withdrawstatuschangelog" (\n  "id" bigint NOT NULL AUTO_INCREMENT,\n  "status" smallint unsigned NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "payment_request_id" bigint NOT NULL,\n  PRIMARY KEY ("id"),\n  KEY "mpesa_et_withdrawsta_payment_request_id_91abc211_fk_mpesa_et_" ("payment_request_id"),\n  CONSTRAINT "mpesa_et_withdrawsta_payment_request_id_91abc211_fk_mpesa_et_" FOREIGN KEY ("payment_request_id") REFERENCES "mpesa_et_withdrawpaymentrequest" ("id"),\n  CONSTRAINT "mpesa_et_withdrawstatuschangelog_chk_1" CHECK ((`status` >= 0))\n)

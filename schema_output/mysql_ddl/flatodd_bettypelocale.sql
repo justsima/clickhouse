@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+flatodd_bettypelocale	CREATE TABLE "flatodd_bettypelocale" (\n  "id" int NOT NULL AUTO_INCREMENT,\n  "translation" varchar(200) NOT NULL,\n  "bet_type_id" int NOT NULL,\n  "locale_id" int NOT NULL,\n  PRIMARY KEY ("id"),\n  KEY "flatodd_bettypelocale_bet_type_id_a1586462_fk_flatodd_bettype_id" ("bet_type_id"),\n  KEY "flatodd_bettypelocal_locale_id_05084c58_fk_flatodd_l" ("locale_id"),\n  CONSTRAINT "flatodd_bettypelocal_locale_id_05084c58_fk_flatodd_l" FOREIGN KEY ("locale_id") REFERENCES "flatodd_langlocale" ("id"),\n  CONSTRAINT "flatodd_bettypelocale_bet_type_id_a1586462_fk_flatodd_bettype_id" FOREIGN KEY ("bet_type_id") REFERENCES "flatodd_bettype" ("id")\n)

@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+flatodd_importantnote	CREATE TABLE "flatodd_importantnote" (\n  "id" int NOT NULL AUTO_INCREMENT,\n  "title" varchar(150) NOT NULL,\n  "description" longtext NOT NULL,\n  "note_type" smallint unsigned NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "locale_id" int NOT NULL,\n  PRIMARY KEY ("id"),\n  KEY "flatodd_importantnot_locale_id_ad212a92_fk_flatodd_l" ("locale_id"),\n  CONSTRAINT "flatodd_importantnot_locale_id_ad212a92_fk_flatodd_l" FOREIGN KEY ("locale_id") REFERENCES "flatodd_langlocale" ("id"),\n  CONSTRAINT "flatodd_importantnote_chk_1" CHECK ((`note_type` >= 0))\n)

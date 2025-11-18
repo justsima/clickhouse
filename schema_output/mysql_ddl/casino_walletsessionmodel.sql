@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+casino_walletsessionmodel	CREATE TABLE "casino_walletsessionmodel" (\n  "id" bigint NOT NULL AUTO_INCREMENT,\n  "entity_id" varchar(255) NOT NULL,\n  "session_id" varchar(255) NOT NULL,\n  "player_id" longtext NOT NULL,\n  "expires_at" datetime(6) NOT NULL,\n  PRIMARY KEY ("id"),\n  UNIQUE KEY "session_id" ("session_id"),\n  UNIQUE KEY "casino_walletsessionmodel_entity_id_session_id_f778f16b_uniq" ("entity_id","session_id"),\n  KEY "casino_wall_session_b41974_idx" ("session_id"),\n  KEY "casino_wall_expires_fdfe03_idx" ("expires_at"),\n  KEY "casino_wall_entity__3ba94c_idx" ("entity_id","session_id")\n)

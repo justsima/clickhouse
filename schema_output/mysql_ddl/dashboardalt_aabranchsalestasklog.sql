@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+dashboardalt_aabranchsalestasklog	CREATE TABLE "dashboardalt_aabranchsalestasklog" (\n  "id" bigint NOT NULL AUTO_INCREMENT,\n  "file_name" varchar(200) NOT NULL,\n  "task_id" char(32) NOT NULL,\n  "task_status" varchar(50) NOT NULL,\n  "started_at" datetime(6) DEFAULT NULL,\n  "finished_at" datetime(6) DEFAULT NULL,\n  "messages" longtext,\n  "failed" tinyint(1) NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  PRIMARY KEY ("id"),\n  UNIQUE KEY "task_id" ("task_id")\n)

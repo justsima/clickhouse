@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+flatodd_memberclaim	CREATE TABLE "flatodd_memberclaim" (\n  "id" int NOT NULL AUTO_INCREMENT,\n  "amount" double NOT NULL,\n  "status" varchar(20) NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "claimer_id" int NOT NULL,\n  PRIMARY KEY ("id"),\n  KEY "flatodd_memberclaim_claimer_id_896bb983_fk_flatodd_member_id" ("claimer_id"),\n  CONSTRAINT "flatodd_memberclaim_claimer_id_896bb983_fk_flatodd_member_id" FOREIGN KEY ("claimer_id") REFERENCES "flatodd_member" ("id")\n)
