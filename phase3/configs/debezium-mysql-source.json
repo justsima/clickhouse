@@ -16,8 +16,9 @@
 
     "topic.prefix": "mysql",
 
-    "snapshot.mode": "initial_only",
+    "snapshot.mode": "initial",
     "snapshot.locking.mode": "none",
+    "snapshot.fetch.size": "10240",
 
     "schema.history.internal.kafka.bootstrap.servers": "redpanda:9092",
     "schema.history.internal.kafka.topic": "schema-changes.mysql",
