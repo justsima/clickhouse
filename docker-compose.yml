@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # Redpanda - Kafka-compatible streaming platform
   redpanda:
@@ -20,9 +18,9 @@ services:
       - --mode dev-container
       - --default-log-level=info
     ports:
-      - "9093:19092"    # Kafka API (external) - changed to avoid conflict
-      - "8081:18081"    # Schema Registry (external)
-      - "8082:18082"    # HTTP Proxy (external)
+      - "9093:19092"    # Kafka API (external)
+      - "8081:18081"    # Schema Registry
+      - "8082:18082"    # HTTP Proxy
       - "9644:9644"     # Admin API
     volumes:
       - redpanda_data:/var/lib/redpanda/data
@@ -55,7 +53,7 @@ services:
             - name: kafka-connect
               url: http://kafka-connect:8083
     ports:
-      - "8086:8080"    # Console UI - changed to avoid conflict
+      - "8086:8080"    # Console UI
     networks:
       - clickhouse-network
     depends_on:
@@ -67,7 +65,7 @@ services:
     image: debezium/connect:2.5
     container_name: kafka-connect-clickhouse
     ports:
-      - "8085:8083"    # REST API - changed to avoid conflict
+      - "8085:8083"    # REST API
     environment:
       BOOTSTRAP_SERVERS: redpanda:9092
       GROUP_ID: clickhouse-cdc-connect-cluster
@@ -89,12 +87,12 @@ services:
       # Plugin path
       CONNECT_PLUGIN_PATH: /kafka/connect,/debezium/connectors
 
-      # Logging
+      # Logging (FIXED)
       CONNECT_LOG4J_ROOT_LOGLEVEL: INFO
       CONNECT_LOG4J_LOGGERS: org.apache.kafka.connect.runtime.rest=WARN,org.reflections=ERROR
 
     volumes:
-      - ./configs/clickhouse-sink:/kafka/connect/clickhouse-sink
+      - ./configs/connectors:/kafka/connect/clickhouse-connectors
     networks:
       - clickhouse-network
     depends_on:

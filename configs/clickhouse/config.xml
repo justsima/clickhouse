@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<clickhouse>
+    <!-- Listen on all interfaces -->
+    <listen_host>0.0.0.0</listen_host>
+
+    <!-- HTTP server settings -->
+    <http_port>8123</http_port>
+
+    <!-- Native protocol port -->
+    <tcp_port>9000</tcp_port>
+
+    <!-- Logging -->
+    <logger>
+        <level>information</level>
+        <log>/var/log/clickhouse-server/clickhouse-server.log</log>
+        <errorlog>/var/log/clickhouse-server/clickhouse-server.err.log</errorlog>
+        <size>1000M</size>
+        <count>10</count>
+    </logger>
+
+    <!-- Query log -->
+    <query_log>
+        <database>system</database>
+        <table>query_log</table>
+        <partition_by>toYYYYMM(event_date)</partition_by>
+        <flush_interval_milliseconds>7500</flush_interval_milliseconds>
+    </query_log>
+
+    <!-- Performance settings -->
+    <max_concurrent_queries>100</max_concurrent_queries>
+    <max_server_memory_usage>0</max_server_memory_usage>
+    <max_thread_pool_size>10000</max_thread_pool_size>
+
+    <!-- Merge settings to reduce disk pressure -->
+    <merge_tree>
+        <max_bytes_to_merge_at_max_space_in_pool>161061273600</max_bytes_to_merge_at_max_space_in_pool>
+        <parts_to_throw_insert>300</parts_to_throw_insert>
+        <parts_to_delay_insert>150</parts_to_delay_insert>
+    </merge_tree>
+
+    <!-- Background pool sizes -->
+    <background_pool_size>16</background_pool_size>
+    <background_schedule_pool_size>16</background_schedule_pool_size>
+
+    <!-- Distributed DDL -->
+    <distributed_ddl>
+        <path>/clickhouse/task_queue/ddl</path>
+    </distributed_ddl>
+
+    <!-- Format schema path -->
+    <format_schema_path>/var/lib/clickhouse/format_schemas/</format_schema_path>
+
+    <!-- Timezone -->
+    <timezone>UTC</timezone>
+
+    <!-- Compression settings -->
+    <compression>
+        <case>
+            <min_part_size>10485760</min_part_size>
+            <min_part_size_ratio>0.01</min_part_size_ratio>
+            <method>lz4</method>
+        </case>
+    </compression>
+</clickhouse>
