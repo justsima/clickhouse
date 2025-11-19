@@ -7,8 +7,10 @@ set +e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PHASE3_DIR="$(dirname "$SCRIPT_DIR")"
+PROJECT_ROOT="$(dirname "$PHASE3_DIR")"
 CONFIG_DIR="$PHASE3_DIR/configs"
-OUTPUT_DIR="$PHASE3_DIR/schema_output"
+# Fixed: Use root-level schema_output where the FIXED DDL files are located
+OUTPUT_DIR="$PROJECT_ROOT/schema_output"
 DDL_DIR="$OUTPUT_DIR/clickhouse_ddl"
 
 # Colors
