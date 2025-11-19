@@ -80,14 +80,17 @@ else
 fi
 
 echo ""
-echo "2. Installing ClickHouse Kafka Connect Connector"
-echo "-------------------------------------------------"
+echo "2. Verifying ClickHouse Kafka Connect Connector"
+echo "------------------------------------------------"
 
-print_info "Checking if ClickHouse Kafka Connect connector is installed..."
+print_info "Checking if ClickHouse Kafka Connect connector is loaded..."
 
-# Check if connector already exists
-if docker exec kafka-connect-clickhouse ls /kafka/connect/clickhouse-kafka/clickhouse-kafka-connect-*.jar &>/dev/null; then
-    print_status 0 "ClickHouse Kafka Connect connector already installed"
+# Check if connector is available in plugins (more reliable than file check)
+if curl -s "$CONNECT_URL/connector-plugins" 2>/dev/null | grep -q "ClickHouseSinkConnector"; then
+    print_status 0 "ClickHouse Kafka Connect connector already loaded"
+elif docker exec kafka-connect-clickhouse ls /kafka/connect/clickhouse-kafka/*.jar &>/dev/null 2>&1; then
+    print_status 0 "ClickHouse Kafka Connect connector files found"
+    print_info "Connector will be loaded automatically"
 else
     echo "Installing ClickHouse Kafka Connect connector..."
 
