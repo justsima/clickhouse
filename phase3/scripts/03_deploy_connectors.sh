@@ -6,6 +6,7 @@ set +e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PHASE3_DIR="$(dirname "$SCRIPT_DIR")"
+PROJECT_ROOT="$(dirname "$PHASE3_DIR")"
 CONFIG_DIR="$PHASE3_DIR/configs"
 
 # Colors
@@ -36,11 +37,12 @@ echo "   Connector Deployment"
 echo "========================================"
 echo ""
 
-# Load environment variables
-if [ -f "$CONFIG_DIR/.env" ]; then
-    source "$CONFIG_DIR/.env"
+# Load environment variables from centralized .env file
+if [ -f "$PROJECT_ROOT/.env" ]; then
+    source "$PROJECT_ROOT/.env"
+    print_info "Loaded configuration from $PROJECT_ROOT/.env"
 else
-    print_error ".env file not found"
+    print_error ".env file not found at $PROJECT_ROOT/.env"
     exit 1
 fi
 
@@ -78,55 +80,72 @@ else
 fi
 
 echo ""
-echo "2. Installing ClickHouse JDBC Driver"
-echo "-------------------------------------"
+echo "2. Installing ClickHouse Kafka Connect Connector"
+echo "-------------------------------------------------"
 
-print_info "Checking if ClickHouse JDBC driver is installed..."
+print_info "Checking if ClickHouse Kafka Connect connector is installed..."
 
-# Check if driver already exists
-if docker exec kafka-connect-clickhouse ls /kafka/connect/clickhouse-jdbc/clickhouse-jdbc.jar &>/dev/null; then
-    print_status 0 "ClickHouse JDBC driver already installed"
+# Check if connector already exists
+if docker exec kafka-connect-clickhouse ls /kafka/connect/clickhouse-kafka/clickhouse-kafka-connect-*.jar &>/dev/null; then
+    print_status 0 "ClickHouse Kafka Connect connector already installed"
 else
-    echo "Installing ClickHouse JDBC driver..."
+    echo "Installing ClickHouse Kafka Connect connector..."
 
-    # Download ClickHouse JDBC driver
-    JDBC_VERSION="0.6.0"
-    JDBC_URL="https://github.com/ClickHouse/clickhouse-java/releases/download/v${JDBC_VERSION}/clickhouse-jdbc-${JDBC_VERSION}-shaded.jar"
+    # Download ClickHouse Kafka Connect connector
+    # Using official ClickHouse connector from GitHub releases
+    CONNECTOR_VERSION="1.0.13"
+    CONNECTOR_URL="https://github.com/ClickHouse/clickhouse-kafka-connect/releases/download/v${CONNECTOR_VERSION}/clickhouse-kafka-connect-v${CONNECTOR_VERSION}.zip"
 
     docker exec kafka-connect-clickhouse bash -c "
-        mkdir -p /kafka/connect/clickhouse-jdbc &&
-        cd /kafka/connect/clickhouse-jdbc &&
-        curl -L -o clickhouse-jdbc.jar '$JDBC_URL' 2>&1
-    " | grep -v "^\s*$" | head -5
+        mkdir -p /tmp/clickhouse-connector &&
+        cd /tmp/clickhouse-connector &&
+        curl -L -o connector.zip '$CONNECTOR_URL' 2>&1 &&
+        unzip -q connector.zip &&
+        mkdir -p /kafka/connect/clickhouse-kafka &&
+        cp *.jar /kafka/connect/clickhouse-kafka/ &&
+        cd / &&
+        rm -rf /tmp/clickhouse-connector
+    " | grep -v "^\s*$" | head -10
 
-    # Verify download
-    if docker exec kafka-connect-clickhouse ls /kafka/connect/clickhouse-jdbc/clickhouse-jdbc.jar &>/dev/null; then
-        FILESIZE=$(docker exec kafka-connect-clickhouse stat -c%s /kafka/connect/clickhouse-jdbc/clickhouse-jdbc.jar)
+    # Verify installation
+    if docker exec kafka-connect-clickhouse ls /kafka/connect/clickhouse-kafka/*.jar &>/dev/null 2>&1; then
+        JAR_COUNT=$(docker exec kafka-connect-clickhouse ls -1 /kafka/connect/clickhouse-kafka/*.jar 2>/dev/null | wc -l)
+        print_status 0 "ClickHouse Kafka Connect connector installed ($JAR_COUNT JAR files)"
 
-        if [ "$FILESIZE" -gt 1000000 ]; then
-            print_status 0 "ClickHouse JDBC driver installed (${FILESIZE} bytes)"
+        print_info "Restarting Kafka Connect to load connector..."
+        docker restart kafka-connect-clickhouse >/dev/null 2>&1
 
-            print_info "Restarting Kafka Connect to load JDBC driver..."
+        # Wait for Kafka Connect to be ready
+        print_info "Waiting for Kafka Connect to initialize..."
+        for i in {1..12}; do
+            if curl -s "$CONNECT_URL/" | grep -q "version"; then
+                print_status 0 "Kafka Connect restarted and ready"
+                break
+            fi
+            echo -n "."
+            sleep 5
+        done
+        echo ""
+    else
+        print_error "Connector installation failed"
+        echo "Trying alternative installation method..."
+
+        # Alternative: Install from Maven Central
+        docker exec kafka-connect-clickhouse bash -c "
+            mkdir -p /kafka/connect/clickhouse-kafka &&
+            cd /kafka/connect/clickhouse-kafka &&
+            curl -L -o clickhouse-kafka-connect.jar 'https://repo1.maven.org/maven2/com/clickhouse/clickhouse-kafka-connect/1.0.13/clickhouse-kafka-connect-1.0.13-all.jar' 2>&1
+        " | grep -v "^\s*$" | head -5
+
+        if docker exec kafka-connect-clickhouse ls /kafka/connect/clickhouse-kafka/*.jar &>/dev/null 2>&1; then
+            print_status 0 "Connector installed via Maven Central"
             docker restart kafka-connect-clickhouse >/dev/null 2>&1
-
-            # Wait for Kafka Connect to be ready
-            print_info "Waiting for Kafka Connect to initialize..."
-            for i in {1..12}; do
-                if curl -s "$CONNECT_URL/" | grep -q "version"; then
-                    print_status 0 "Kafka Connect restarted and ready"
-                    break
-                fi
-                echo -n "."
-                sleep 5
-            done
-            echo ""
+            sleep 10
         else
-            print_error "Downloaded file is too small ($FILESIZE bytes) - download failed"
+            print_error "Both installation methods failed"
+            echo "You may need to manually download the connector"
             exit 1
         fi
-    else
-        print_error "JDBC driver download failed"
-        exit 1
     fi
 fi
 
@@ -164,12 +183,16 @@ else
     exit 1
 fi
 
-if echo "$CONNECTORS" | grep -q "io.debezium.connector.jdbc.JdbcSinkConnector"; then
-    print_status 0 "Debezium JDBC Sink connector available"
+if echo "$CONNECTORS" | grep -q "com.clickhouse.kafka.connect.ClickHouseSinkConnector"; then
+    print_status 0 "ClickHouse Kafka Connect Sink connector available"
 else
-    print_error "Debezium JDBC Sink connector not found"
+    print_error "ClickHouse Kafka Connect Sink connector not found"
+    echo ""
     echo "Available connectors:"
     echo "$CONNECTORS"
+    echo ""
+    echo "The connector may need to be installed manually."
+    echo "Please ensure the connector JAR is in /kafka/connect/clickhouse-kafka/"
     exit 1
 fi
 
@@ -201,15 +224,15 @@ else
 fi
 
 echo ""
-echo "5. Deploying ClickHouse JDBC Sink Connector"
-echo "--------------------------------------------"
+echo "5. Deploying ClickHouse Kafka Connect Sink Connector"
+echo "-----------------------------------------------------"
 
-# Read and substitute template - use JDBC sink config
-if [ -f "$CONFIG_DIR/clickhouse-jdbc-sink.json" ]; then
-    CLICKHOUSE_CONFIG=$(cat "$CONFIG_DIR/clickhouse-jdbc-sink.json")
+# Read and substitute template - use ClickHouse native Kafka connector
+if [ -f "$CONFIG_DIR/clickhouse-sink.json" ]; then
+    CLICKHOUSE_CONFIG=$(cat "$CONFIG_DIR/clickhouse-sink.json")
 else
-    print_error "clickhouse-jdbc-sink.json not found"
-    echo "Using Debezium JDBC Sink connector for ClickHouse"
+    print_error "clickhouse-sink.json not found"
+    echo "ClickHouse Kafka Connect sink configuration missing"
     exit 1
 fi
 
@@ -252,17 +275,24 @@ else
 fi
 
 # Check ClickHouse sink status
-print_info "Checking ClickHouse JDBC sink connector..."
+print_info "Checking ClickHouse Kafka Connect sink connector..."
 SINK_STATUS=$(curl -s "$CONNECT_URL/connectors/clickhouse-sink-connector/status" 2>/dev/null | grep -o '"state":"[^"]*"' | head -1 | cut -d'"' -f4 || echo "NOT_DEPLOYED")
 
 if [ "$SINK_STATUS" = "RUNNING" ]; then
     print_status 0 "ClickHouse sink connector status: $SINK_STATUS"
+
+    # Check task statuses
+    FAILED_TASKS=$(curl -s "$CONNECT_URL/connectors/clickhouse-sink-connector/status" 2>/dev/null | grep -o '"state":"FAILED"' | wc -l)
+    if [ "$FAILED_TASKS" -gt 0 ]; then
+        echo -e "${YELLOW}⚠ Warning: $FAILED_TASKS task(s) are in FAILED state${NC}"
+        echo "  Check logs: docker logs kafka-connect-clickhouse | grep ERROR"
+    fi
 elif [ "$SINK_STATUS" = "NOT_DEPLOYED" ]; then
     echo -e "${YELLOW}⚠ ClickHouse sink connector not deployed${NC}"
     echo "  Data will be in Kafka topics but not automatically written to ClickHouse"
-    echo "  You can consume manually or use alternative approaches"
 else
     print_status 1 "ClickHouse sink connector status: $SINK_STATUS"
+    echo "  Check connector logs for errors"
 fi
 
 echo ""
@@ -279,7 +309,7 @@ echo "========================================"
 echo ""
 echo "Connectors deployed:"
 echo "  - Debezium MySQL Source: $DEBEZIUM_STATUS"
-echo "  - ClickHouse JDBC Sink: $SINK_STATUS"
+echo "  - ClickHouse Kafka Connect Sink: $SINK_STATUS"
 echo ""
 echo "Monitoring URLs:"
 echo "  Kafka Connect API: $CONNECT_URL"

@@ -41,11 +41,11 @@ echo "   ClickHouse Schema Creation"
 echo "========================================"
 echo ""
 
-# Load environment variables
-if [ -f "$CONFIG_DIR/.env" ]; then
-    source "$CONFIG_DIR/.env"
+# Load environment variables from centralized .env file
+if [ -f "$PROJECT_ROOT/.env" ]; then
+    source "$PROJECT_ROOT/.env"
 else
-    print_error ".env file not found"
+    print_error ".env file not found at $PROJECT_ROOT/.env"
     exit 1
 fi
 
