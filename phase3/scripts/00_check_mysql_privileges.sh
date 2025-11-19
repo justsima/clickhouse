@@ -35,7 +35,15 @@ echo ""
 echo "1. Testing MySQL Connection..."
 echo "-------------------------------"
 
-if docker exec clickhouse-server mysql \
+# Install mysql client in kafka-connect container if not present
+echo "Installing MySQL client in Kafka Connect container..."
+docker exec -u root kafka-connect-clickhouse bash -c "
+    if ! command -v mysql &> /dev/null; then
+        apt-get update -qq && apt-get install -y -qq default-mysql-client > /dev/null 2>&1
+    fi
+" 2>/dev/null
+
+if docker exec kafka-connect-clickhouse mysql \
     -h"${MYSQL_HOST}" \
     -P"${MYSQL_PORT}" \
     -u"${MYSQL_USER}" \
@@ -45,13 +53,12 @@ if docker exec clickhouse-server mysql \
 else
     echo -e "${RED}✗${NC} Failed to connect to MySQL"
     echo ""
-    echo "Trying without password prompt..."
-    docker exec -it clickhouse-server mysql \
-        -h"${MYSQL_HOST}" \
-        -P"${MYSQL_PORT}" \
-        -u"${MYSQL_USER}" \
-        -p \
-        -e "SELECT 1"
+    echo "Please verify:"
+    echo "  1. MySQL host is reachable: ${MYSQL_HOST}"
+    echo "  2. MySQL port is correct: ${MYSQL_PORT}"
+    echo "  3. Username is correct: ${MYSQL_USER}"
+    echo "  4. Password is correct"
+    echo "  5. VPS IP is whitelisted in DigitalOcean MySQL settings"
     exit 1
 fi
 
@@ -60,7 +67,7 @@ echo "2. Checking User Privileges..."
 echo "-------------------------------"
 
 # Get grants for current user
-GRANTS=$(docker exec clickhouse-server mysql \
+GRANTS=$(docker exec kafka-connect-clickhouse mysql \
     -h"${MYSQL_HOST}" \
     -P"${MYSQL_PORT}" \
     -u"${MYSQL_USER}" \
