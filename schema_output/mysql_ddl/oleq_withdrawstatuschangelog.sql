@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+oleq_withdrawstatuschangelog	CREATE TABLE "oleq_withdrawstatuschangelog" (\n  "id" bigint NOT NULL AUTO_INCREMENT,\n  "status" smallint unsigned NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "payment_request_id" bigint NOT NULL,\n  PRIMARY KEY ("id"),\n  KEY "oleq_withdrawstatusc_payment_request_id_ef8b0f48_fk_oleq_with" ("payment_request_id"),\n  CONSTRAINT "oleq_withdrawstatusc_payment_request_id_ef8b0f48_fk_oleq_with" FOREIGN KEY ("payment_request_id") REFERENCES "oleq_withdrawpaymentrequest" ("id"),\n  CONSTRAINT "oleq_withdrawstatuschangelog_chk_1" CHECK ((`status` >= 0))\n)

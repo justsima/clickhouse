@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+santimpay_withdrawbank	CREATE TABLE "santimpay_withdrawbank" (\n  "id" bigint NOT NULL AUTO_INCREMENT,\n  "code" varchar(50) NOT NULL,\n  "name" varchar(100) NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "status" smallint unsigned NOT NULL,\n  "transaction_fee" double NOT NULL,\n  "integration_type" smallint unsigned NOT NULL,\n  "order" int NOT NULL,\n  "identifier_type" varchar(20) NOT NULL,\n  PRIMARY KEY ("id"),\n  CONSTRAINT "santimpay_withdrawbank_chk_1" CHECK ((`status` >= 0)),\n  CONSTRAINT "santimpay_withdrawbank_chk_2" CHECK ((`integration_type` >= 0))\n)

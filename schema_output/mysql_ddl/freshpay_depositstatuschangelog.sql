@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+freshpay_depositstatuschangelog	CREATE TABLE "freshpay_depositstatuschangelog" (\n  "id" bigint NOT NULL AUTO_INCREMENT,\n  "status" smallint unsigned NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "payment_request_id" bigint NOT NULL,\n  PRIMARY KEY ("id"),\n  KEY "freshpay_depositstat_payment_request_id_16548f19_fk_freshpay_" ("payment_request_id"),\n  CONSTRAINT "freshpay_depositstat_payment_request_id_16548f19_fk_freshpay_" FOREIGN KEY ("payment_request_id") REFERENCES "freshpay_depositpaymentrequest" ("id"),\n  CONSTRAINT "freshpay_depositstatuschangelog_chk_1" CHECK ((`status` >= 0))\n)

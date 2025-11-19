@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+flatreferal_recruiterinfo	CREATE TABLE "flatreferal_recruiterinfo" (\n  "id" int NOT NULL AUTO_INCREMENT,\n  "recruiter_type" varchar(10) NOT NULL,\n  "is_active" tinyint(1) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "recruiter_id" int NOT NULL,\n  PRIMARY KEY ("id"),\n  UNIQUE KEY "recruiter_id" ("recruiter_id"),\n  CONSTRAINT "flatreferal_recruite_recruiter_id_97adb890_fk_flatodd_m" FOREIGN KEY ("recruiter_id") REFERENCES "flatodd_member" ("id")\n)

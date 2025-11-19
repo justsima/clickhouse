@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+lenco_bank	CREATE TABLE "lenco_bank" (\n  "id" bigint NOT NULL AUTO_INCREMENT,\n  "name" varchar(200) NOT NULL,\n  "code" varchar(200) NOT NULL,\n  "country" varchar(10) NOT NULL,\n  "status" int unsigned NOT NULL,\n  "transaction_support" int unsigned NOT NULL,\n  "is_mobile_money" tinyint(1) NOT NULL,\n  "withdraw_transaction_fee" double NOT NULL,\n  "deposit_transaction_fee" double NOT NULL,\n  PRIMARY KEY ("id"),\n  UNIQUE KEY "code" ("code"),\n  CONSTRAINT "lenco_bank_chk_1" CHECK ((`status` >= 0)),\n  CONSTRAINT "lenco_bank_chk_2" CHECK ((`transaction_support` >= 0))\n)

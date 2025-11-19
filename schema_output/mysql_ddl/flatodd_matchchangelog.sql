@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+flatodd_matchchangelog	CREATE TABLE "flatodd_matchchangelog" (\n  "id" int NOT NULL AUTO_INCREMENT,\n  "change_type" smallint unsigned NOT NULL,\n  "before" varchar(150) NOT NULL,\n  "after" varchar(150) NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "match_id" int NOT NULL,\n  PRIMARY KEY ("id"),\n  KEY "flatodd_matchchangelog_match_id_4bc1b418_fk_flatodd_match_id" ("match_id"),\n  CONSTRAINT "flatodd_matchchangelog_match_id_4bc1b418_fk_flatodd_match_id" FOREIGN KEY ("match_id") REFERENCES "flatodd_match" ("id"),\n  CONSTRAINT "flatodd_matchchangelog_chk_1" CHECK ((`change_type` >= 0))\n)

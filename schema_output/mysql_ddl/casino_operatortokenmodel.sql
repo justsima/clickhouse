@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+casino_operatortokenmodel	CREATE TABLE "casino_operatortokenmodel" (\n  "id" bigint NOT NULL AUTO_INCREMENT,\n  "entity_id" varchar(255) NOT NULL,\n  "token" varchar(255) NOT NULL,\n  "player_id" longtext NOT NULL,\n  "expires_at" datetime(6) NOT NULL,\n  PRIMARY KEY ("id"),\n  UNIQUE KEY "token" ("token"),\n  UNIQUE KEY "casino_operatortokenmodel_entity_id_token_f2478499_uniq" ("entity_id","token"),\n  KEY "casino_oper_token_bf8789_idx" ("token"),\n  KEY "casino_oper_expires_3097c1_idx" ("expires_at"),\n  KEY "casino_oper_entity__eb350d_idx" ("entity_id","token")\n)

@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+flatodd_jackpotevent	CREATE TABLE "flatodd_jackpotevent" (\n  "id" int NOT NULL AUTO_INCREMENT,\n  "jackpot_id" int NOT NULL,\n  "event_id" int NOT NULL,\n  "won_choice" varchar(5) NOT NULL,\n  PRIMARY KEY ("id"),\n  KEY "flatodd_jackpotevent_jackpot_id_2b5392fd_fk_flatodd_jackpot_id" ("jackpot_id"),\n  KEY "flatodd_jackpotevent_event_id_d37dbec8_fk_flatodd_match_id" ("event_id"),\n  CONSTRAINT "flatodd_jackpotevent_event_id_d37dbec8_fk_flatodd_match_id" FOREIGN KEY ("event_id") REFERENCES "flatodd_match" ("id"),\n  CONSTRAINT "flatodd_jackpotevent_jackpot_id_2b5392fd_fk_flatodd_jackpot_id" FOREIGN KEY ("jackpot_id") REFERENCES "flatodd_jackpot" ("id")\n)

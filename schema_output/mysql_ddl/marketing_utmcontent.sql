@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+marketing_utmcontent	CREATE TABLE "marketing_utmcontent" (\n  "id" bigint NOT NULL AUTO_INCREMENT,\n  "name" varchar(100) NOT NULL,\n  "description" varchar(200) DEFAULT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "created_by_id" int DEFAULT NULL,\n  PRIMARY KEY ("id"),\n  KEY "marketing_utmcontent_created_by_id_8fb228e3_fk_auth_user_id" ("created_by_id"),\n  CONSTRAINT "marketing_utmcontent_created_by_id_8fb228e3_fk_auth_user_id" FOREIGN KEY ("created_by_id") REFERENCES "auth_user" ("id")\n)

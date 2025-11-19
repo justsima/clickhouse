@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+casinocashback_casinocashbacksummary	CREATE TABLE "casinocashback_casinocashbacksummary" (\n  "id" bigint NOT NULL AUTO_INCREMENT,\n  "total_cashback_paid" decimal(10,2) NOT NULL,\n  "total_ggr" decimal(23,2) NOT NULL,\n  "frequency" varchar(50) NOT NULL,\n  "percentage" decimal(5,2) NOT NULL,\n  "members_count" int NOT NULL,\n  "date_range_start" date DEFAULT NULL,\n  "date_range_end" date DEFAULT NULL,\n  "created_at" date NOT NULL,\n  PRIMARY KEY ("id"),\n  KEY "casinocashb_frequen_a99b83_idx" ("frequency"),\n  KEY "casinocashb_date_ra_697d2d_idx" ("date_range_start"),\n  KEY "casinocashb_date_ra_4422b7_idx" ("date_range_end")\n)

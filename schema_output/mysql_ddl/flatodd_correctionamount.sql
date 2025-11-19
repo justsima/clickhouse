@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+flatodd_correctionamount	CREATE TABLE "flatodd_correctionamount" (\n  "id" int NOT NULL AUTO_INCREMENT,\n  "amount" double NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "wallet_id" int NOT NULL,\n  "amount_type" int NOT NULL,\n  PRIMARY KEY ("id"),\n  KEY "flatodd_correctionamount_wallet_id_d278629b_fk_flatodd_wallet_id" ("wallet_id"),\n  CONSTRAINT "flatodd_correctionamount_wallet_id_d278629b_fk_flatodd_wallet_id" FOREIGN KEY ("wallet_id") REFERENCES "flatodd_wallet" ("id")\n)

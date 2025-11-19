@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+unayo_withdrawstatuschangelog	CREATE TABLE "unayo_withdrawstatuschangelog" (\n  "id" bigint NOT NULL AUTO_INCREMENT,\n  "status" smallint unsigned NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "payment_request_id" bigint NOT NULL,\n  PRIMARY KEY ("id"),\n  KEY "unayo_withdrawstatus_payment_request_id_8ded4b91_fk_unayo_wit" ("payment_request_id"),\n  CONSTRAINT "unayo_withdrawstatus_payment_request_id_8ded4b91_fk_unayo_wit" FOREIGN KEY ("payment_request_id") REFERENCES "unayo_withdrawpaymentrequest" ("id"),\n  CONSTRAINT "unayo_withdrawstatuschangelog_chk_1" CHECK ((`status` >= 0))\n)

@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+flatodd_dataprovider	CREATE TABLE "flatodd_dataprovider" (\n  "id" int NOT NULL AUTO_INCREMENT,\n  "compatability" smallint unsigned NOT NULL,\n  "api_key" varchar(200) NOT NULL,\n  "status" smallint unsigned NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "provider_url" varchar(200) NOT NULL,\n  PRIMARY KEY ("id"),\n  UNIQUE KEY "flatodd_dataprovider_compatability_78289fbc_uniq" ("compatability"),\n  CONSTRAINT "flatodd_dataprovider_chk_1" CHECK ((`compatability` >= 0)),\n  CONSTRAINT "flatodd_dataprovider_chk_2" CHECK ((`status` >= 0))\n)

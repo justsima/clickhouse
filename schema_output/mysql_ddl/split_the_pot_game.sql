@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+split_the_pot_game	CREATE TABLE "split_the_pot_game" (\n  "id" bigint NOT NULL AUTO_INCREMENT,\n  "game_id" varchar(250) NOT NULL,\n  "game_kind" varchar(250) NOT NULL,\n  "game_variant" varchar(250) NOT NULL,\n  "title" varchar(250) NOT NULL,\n  "enabled" tinyint(1) NOT NULL,\n  "maintenance" tinyint(1) NOT NULL,\n  "url" varchar(300) NOT NULL,\n  "free_to_play_url" varchar(500) NOT NULL,\n  "bet_history_url" varchar(500) NOT NULL,\n  "square_x3" json DEFAULT NULL,\n  "wide_x" json DEFAULT NULL,\n  "status" int NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  PRIMARY KEY ("id")\n)

@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+flatodd_smsdriver	CREATE TABLE "flatodd_smsdriver" (\n  "id" int NOT NULL AUTO_INCREMENT,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "name" varchar(50) NOT NULL,\n  "handler_class" varchar(50) NOT NULL,\n  "supported_variable" decimal(10,2) NOT NULL,\n  "bulk_chunk_size" decimal(10,2) NOT NULL,\n  "is_active" tinyint(1) NOT NULL,\n  "delay_per_chunk" decimal(10,2) NOT NULL,\n  PRIMARY KEY ("id"),\n  UNIQUE KEY "name" ("name"),\n  UNIQUE KEY "flatodd_smsdriver_handler_class_4cc67ec7_uniq" ("handler_class")\n)

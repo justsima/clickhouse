@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+lenco_lencoconfiguration	CREATE TABLE "lenco_lencoconfiguration" (\n  "configuration_ptr_id" int NOT NULL,\n  "public_key" varchar(200) NOT NULL,\n  "base_url" varchar(200) NOT NULL,\n  "api_token" varchar(200) NOT NULL,\n  "email" varchar(254) DEFAULT NULL,\n  "currency" varchar(5) NOT NULL,\n  "bearer" varchar(10) NOT NULL,\n  "accountId" varchar(200) DEFAULT NULL,\n  PRIMARY KEY ("configuration_ptr_id"),\n  CONSTRAINT "lenco_lencoconfigura_configuration_ptr_id_c884964b_fk_flatodd_c" FOREIGN KEY ("configuration_ptr_id") REFERENCES "flatodd_configuration" ("id")\n)

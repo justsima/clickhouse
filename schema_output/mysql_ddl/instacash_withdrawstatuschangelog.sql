@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+instacash_withdrawstatuschangelog	CREATE TABLE "instacash_withdrawstatuschangelog" (\n  "id" bigint NOT NULL AUTO_INCREMENT,\n  "status" smallint unsigned NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "payment_request_id" bigint NOT NULL,\n  PRIMARY KEY ("id"),\n  KEY "instacash_withdrawst_payment_request_id_567a4c2b_fk_instacash" ("payment_request_id"),\n  CONSTRAINT "instacash_withdrawst_payment_request_id_567a4c2b_fk_instacash" FOREIGN KEY ("payment_request_id") REFERENCES "instacash_withdrawpaymentrequest" ("id"),\n  CONSTRAINT "instacash_withdrawstatuschangelog_chk_1" CHECK ((`status` >= 0))\n)

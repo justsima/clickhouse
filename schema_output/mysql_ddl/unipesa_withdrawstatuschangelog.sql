@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+unipesa_withdrawstatuschangelog	CREATE TABLE "unipesa_withdrawstatuschangelog" (\n  "id" bigint NOT NULL AUTO_INCREMENT,\n  "status" smallint unsigned NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "payment_request_id" bigint NOT NULL,\n  PRIMARY KEY ("id"),\n  KEY "unipesa_withdrawstat_payment_request_id_7ad81ac0_fk_unipesa_w" ("payment_request_id"),\n  CONSTRAINT "unipesa_withdrawstat_payment_request_id_7ad81ac0_fk_unipesa_w" FOREIGN KEY ("payment_request_id") REFERENCES "unipesa_withdrawpaymentrequest" ("id"),\n  CONSTRAINT "unipesa_withdrawstatuschangelog_chk_1" CHECK ((`status` >= 0))\n)

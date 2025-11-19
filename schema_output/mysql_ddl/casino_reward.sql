@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+casino_reward	CREATE TABLE "casino_reward" (\n  "id" bigint NOT NULL AUTO_INCREMENT,\n  "reward_type" varchar(100) NOT NULL,\n  "reward_title" varchar(100) NOT NULL,\n  "txn_id" varchar(200) NOT NULL,\n  "amount" double NOT NULL,\n  "currency" varchar(5) NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "player_id" int NOT NULL,\n  PRIMARY KEY ("id"),\n  KEY "casino_reward_player_id_f0a3e9b8_fk_flatodd_member_id" ("player_id"),\n  CONSTRAINT "casino_reward_player_id_f0a3e9b8_fk_flatodd_member_id" FOREIGN KEY ("player_id") REFERENCES "flatodd_member" ("id")\n)

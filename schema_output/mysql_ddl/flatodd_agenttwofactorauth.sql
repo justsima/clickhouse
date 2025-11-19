@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+flatodd_agenttwofactorauth	CREATE TABLE "flatodd_agenttwofactorauth" (\n  "id" int NOT NULL AUTO_INCREMENT,\n  "otp_secret" varchar(255) NOT NULL,\n  "otp_created_at" datetime(6) NOT NULL,\n  "failed_attempts" int NOT NULL,\n  "lockout_until" datetime(6) DEFAULT NULL,\n  "resend_count" int NOT NULL,\n  "user_id" int NOT NULL,\n  PRIMARY KEY ("id"),\n  UNIQUE KEY "user_id" ("user_id"),\n  CONSTRAINT "flatodd_agenttwofactorauth_user_id_e1dfc0ca_fk_auth_user_id" FOREIGN KEY ("user_id") REFERENCES "auth_user" ("id")\n)

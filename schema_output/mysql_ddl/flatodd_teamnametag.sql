@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+flatodd_teamnametag	CREATE TABLE "flatodd_teamnametag" (\n  "id" int NOT NULL AUTO_INCREMENT,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "team_id" int NOT NULL,\n  "name_tag" varchar(150) NOT NULL,\n  PRIMARY KEY ("id"),\n  UNIQUE KEY "flatodd_teamnametag_name_tag_e2b9ef04_uniq" ("name_tag"),\n  KEY "flatodd_teamnametag_team_id_5cca011b_fk_flatodd_team_id" ("team_id"),\n  CONSTRAINT "flatodd_teamnametag_team_id_5cca011b_fk_flatodd_team_id" FOREIGN KEY ("team_id") REFERENCES "flatodd_team" ("id")\n)

@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+chappa_chapaconfiguration	CREATE TABLE "chappa_chapaconfiguration" (\n  "configuration_ptr_id" int NOT NULL,\n  "base_url" varchar(200) DEFAULT NULL,\n  "email" varchar(200) DEFAULT NULL,\n  "secret_key" varchar(200) DEFAULT NULL,\n  "encryption_key" varchar(200) DEFAULT NULL,\n  "is_active" tinyint(1) NOT NULL,\n  PRIMARY KEY ("configuration_ptr_id"),\n  CONSTRAINT "chappa_chapaconfigur_configuration_ptr_id_9553d606_fk_flatodd_c" FOREIGN KEY ("configuration_ptr_id") REFERENCES "flatodd_configuration" ("id")\n)

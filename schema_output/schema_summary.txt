@@ -1,0 +1,2257 @@
+MySQL to ClickHouse Schema Analysis
+Generated: Tue Nov 18 09:27:45 UTC 2025
+Database: mulazamflatoddbet
+Total Tables: 450
+
+Table Details:
+----------------------------------------
+Table: agent_prepaidbetwallet
+  Rows: 1
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: agent_prepaidbetwalletchangelog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: agent_prepaidbetwallettransaction
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: agent_prepaiddepositwallet
+  Rows: 1
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: agent_prepaidtransaction
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: alanbase_alanbasecommissionsetting
+  Rows: 1
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: alanbase_alanbaseconfiguration
+  Rows: 1
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: alanbase_eventrequest
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: alanbase_goalrequest
+  Rows: 15
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: amole_paymentrequest
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: arifpay_arifpayconfiguration
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: configuration_ptr_id
+
+Table: arifpay_depositpaymentmethod
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: arifpay_depositpaymentrequest
+  Rows: 0
+  Size: 0.11 MB
+  Primary Key: id
+
+Table: arifpay_depositstatuschangelog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: arifpay_historicalarifpayconfiguration
+  Rows: 0
+  Size: 0.09 MB
+  Primary Key: history_id
+
+Table: arifpay_historicaldepositpaymentmethod
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: history_id
+
+Table: arifpay_historicalwithdrawpaymentmethod
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: history_id
+
+Table: arifpay_withdrawpaymentmethod
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: arifpay_withdrawpaymentrequest
+  Rows: 0
+  Size: 0.11 MB
+  Primary Key: id
+
+Table: arifpay_withdrawstatuschangelog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: auth_group
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: auth_group_permissions
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: auth_permission
+  Rows: 1740
+  Size: 0.25 MB
+  Primary Key: id
+
+Table: auth_user
+  Rows: 24187
+  Size: 5.03 MB
+  Primary Key: id
+
+Table: auth_user_groups
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: auth_user_user_permissions
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: authtoken_token
+  Rows: 10261
+  Size: 2.98 MB
+  Primary Key: key
+
+Table: betradar_betrecommendationconfiguration
+  Rows: 1
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: betradar_betrecommendationconfiguration_main_markets
+  Rows: 4
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: betradar_betrecommendationconfiguration_supported_sport_types
+  Rows: 4
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: betradar_cacheloginfo
+  Rows: 610720
+  Size: 23.55 MB
+  Primary Key: id
+
+Table: betradar_messagelog
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: betradar_producer
+  Rows: 1
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: bonus_bonusdescription
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: bonus_bonusdescriptionlocale
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: bonus_depositbonussetting
+  Rows: 2
+  Size: 0.08 MB
+  Primary Key: id
+
+Table: bonus_depositbonussetting_games_list
+  Rows: 4
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: bonus_freebetsetting
+  Rows: 3
+  Size: 0.08 MB
+  Primary Key: id
+
+Table: bonus_historicalbonusdescription
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: history_id
+
+Table: bonus_historicalbonusdescriptionlocale
+  Rows: 0
+  Size: 0.09 MB
+  Primary Key: history_id
+
+Table: bonus_historicaldepositbonussetting
+  Rows: 5
+  Size: 0.13 MB
+  Primary Key: history_id
+
+Table: bonus_historicalfreebetsetting
+  Rows: 13
+  Size: 0.13 MB
+  Primary Key: history_id
+
+Table: bonus_historicaluserbonus
+  Rows: 5732
+  Size: 6.55 MB
+  Primary Key: history_id
+
+Table: bonus_historicaluserfreebet
+  Rows: 3595
+  Size: 1.30 MB
+  Primary Key: history_id
+
+Table: bonus_historicalwageringpolicy
+  Rows: 7
+  Size: 0.06 MB
+  Primary Key: history_id
+
+Table: bonus_userbonus
+  Rows: 453
+  Size: 0.55 MB
+  Primary Key: id
+
+Table: bonus_userfreebet
+  Rows: 3552
+  Size: 2.58 MB
+  Primary Key: id
+
+Table: bonus_wageringpolicy
+  Rows: 1
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: campaign_group
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: campaign_message
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: campaign_messagejob
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: casino_aggregator
+  Rows: 2
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: casino_bet
+  Rows: 503341
+  Size: 511.78 MB
+  Primary Key: id
+
+Table: casino_cashbonus
+  Rows: 0
+  Size: 0.09 MB
+  Primary Key: id
+
+Table: casino_contentservercategory
+  Rows: 94
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: casino_fantasyleague
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: casino_freebet
+  Rows: 6503
+  Size: 6.38 MB
+  Primary Key: id
+
+Table: casino_freebetconfiguration
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: casino_game
+  Rows: 10029
+  Size: 14.08 MB
+  Primary Key: id
+
+Table: casino_game_categories
+  Rows: 158
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: casino_game_content_server_categories
+  Rows: 8772
+  Size: 3.52 MB
+  Primary Key: id
+
+Table: casino_game_tags
+  Rows: 404
+  Size: 0.13 MB
+  Primary Key: id
+
+Table: casino_gameaggregatedreport
+  Rows: 1147
+  Size: 0.52 MB
+  Primary Key: id
+
+Table: casino_gamecategory
+  Rows: 10
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: casino_gameprovider
+  Rows: 104
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: casino_heropicksbet
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: casino_lobbygame
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: casino_oldreport
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: casino_oldreporttask
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: casino_operatortokenmodel
+  Rows: 0
+  Size: 0.09 MB
+  Primary Key: id
+
+Table: casino_payout
+  Rows: 505818
+  Size: 521.58 MB
+  Primary Key: id
+
+Table: casino_providerextrainfo
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: casino_qtecholdreport
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: casino_reporttask
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: casino_reporttaskerrorlog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: casino_reward
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: casino_rollback
+  Rows: 6169
+  Size: 0.63 MB
+  Primary Key: id
+
+Table: casino_setting
+  Rows: 1
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: casino_spribebet
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: casino_spribepayout
+  Rows: 0
+  Size: 0.08 MB
+  Primary Key: id
+
+Table: casino_spriberollback
+  Rows: 0
+  Size: 0.11 MB
+  Primary Key: id
+
+Table: casino_tag
+  Rows: 19
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: casino_useraggregatedreport
+  Rows: 8117
+  Size: 2.33 MB
+  Primary Key: id
+
+Table: casino_usergameaggregatedreport
+  Rows: 9271
+  Size: 7.33 MB
+  Primary Key: id
+
+Table: casino_walletsessionmodel
+  Rows: 33
+  Size: 0.09 MB
+  Primary Key: id
+
+Table: casinocashback_casinocashback
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: casinocashback_casinocashbackconfiguration
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: casinocashback_casinocashbacksummary
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: casinocashback_casinofailedcashback
+  Rows: 0
+  Size: 0.09 MB
+  Primary Key: id
+
+Table: cbebirr_paymentrequest
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: chappa_bank
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: chappa_chapaconfiguration
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: configuration_ptr_id
+
+Table: chappa_depositpaymentrequest
+  Rows: 0
+  Size: 0.11 MB
+  Primary Key: id
+
+Table: chappa_historicalbank
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: history_id
+
+Table: chappa_historicalchapaconfiguration
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: history_id
+
+Table: chappa_withdrawpaymentrequest
+  Rows: 0
+  Size: 0.08 MB
+  Primary Key: id
+
+Table: client_affiliateupdatelog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: client_group
+  Rows: 1
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: client_group_agent_members
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: client_importeduser
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: client_useragentinformation
+  Rows: 76
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: client_userimporttask
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: client_userimporttasklog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: cms_ug_cmsreportjob
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: cms_ug_cmsugconfiguration
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: configuration_ptr_id
+
+Table: cms_ug_game
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: cms_ug_gamefundsinplay
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: cms_ug_gamefundsinplaymovement
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: cms_ug_gamesummary
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: cms_ug_gamesummarymovement
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: cms_ug_historicalcmsugconfiguration
+  Rows: 0
+  Size: 0.08 MB
+  Primary Key: history_id
+
+Table: cms_ug_playeractivity
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: cms_ug_playergamesummary
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: cms_ug_playergamesummarymovement
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: cms_ug_playerregistration
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: crm_customercategory
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: crm_dailytracker
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: crm_stat
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: dashboardalt_aabranchsalestasklog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: dashboardalt_addisabababranchimportedsale
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: dashboardalt_altbranch
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: dashboardalt_dailyreportedbet
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: dashboardalt_importedreportedmonthlybet
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: dashboardalt_monthlyreportedbet
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: dashboardalt_reportedbet
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: dashboardalt_reportedbetdownloads
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: dashboardalt_tasklog
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: dashboardalt_transaction
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: dashboardalt_transactionlog
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: digicard_paymentrequest
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: digimoney_paymentrequest
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: django_admin_log
+  Rows: 37
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: django_content_type
+  Rows: 435
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: django_migrations
+  Rows: 1899
+  Size: 0.16 MB
+  Primary Key: id
+
+Table: django_session
+  Rows: 17
+  Size: 0.03 MB
+  Primary Key: session_key
+
+Table: ebirr_paymentrequest
+  Rows: 0
+  Size: 0.08 MB
+  Primary Key: id
+
+Table: emali_depositpaymentrequest
+  Rows: 0
+  Size: 0.09 MB
+  Primary Key: id
+
+Table: emali_depositstatuschangelog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: emali_withdrawpaymentrequest
+  Rows: 0
+  Size: 0.09 MB
+  Primary Key: id
+
+Table: emali_withdrawstatuschangelog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: emola_depositpaymentrequest
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: emola_depositstatuschangelog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: emola_emolaconfiguration
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: configuration_ptr_id
+
+Table: emola_withdrawpaymentrequest
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: emola_withdrawstatuschangelog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: fenanpay_depositpaymentrequest
+  Rows: 0
+  Size: 0.08 MB
+  Primary Key: id
+
+Table: fenanpay_fenanpayconfiguration
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: configuration_ptr_id
+
+Table: fenanpay_historicalfenanpayconfiguration
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: history_id
+
+Table: fenanpay_historicalpaymentmethod
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: history_id
+
+Table: fenanpay_paymentmethod
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: fenanpay_paymentstatuschangelog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: fenanpay_withdrawalpaymentrequest
+  Rows: 0
+  Size: 0.08 MB
+  Primary Key: id
+
+Table: flatbonus_configuration
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: configuration_ptr_id
+
+Table: flatbonus_memberdepositbonusclaim
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: memberclaim_ptr_id
+
+Table: flatcashout_cashoutconfig
+  Rows: 1
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: flatcashout_cashoutconfig_supported_sport_types
+  Rows: 208
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: flatcashout_offlinecashouttransaction
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: flatcashout_onlinecashouttransaction
+  Rows: 78
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: flatcasino_bet
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: flatcasino_game
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: flatcasino_gameprovider
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: flatcasino_payout
+  Rows: 0
+  Size: 0.08 MB
+  Primary Key: id
+
+Table: flatcasino_rollback
+  Rows: 0
+  Size: 0.09 MB
+  Primary Key: id
+
+Table: flatlog_log
+  Rows: 27239
+  Size: 5.55 MB
+  Primary Key: id
+
+Table: flatlog_useragentinformation
+  Rows: 13399
+  Size: 2.92 MB
+  Primary Key: id
+
+Table: flatloyality_loyalitconfiguration
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: configuration_ptr_id
+
+Table: flatloyality_loyalitypointtransaction
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: flatloyality_loyalitypointwallet
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: flatodd_adminactionlog
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: flatodd_agent
+  Rows: 1
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: flatodd_agentrole
+  Rows: 5
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: flatodd_agenttwofactorauth
+  Rows: 5
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: flatodd_appsetting
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: flatodd_awardtransaction
+  Rows: 84
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: flatodd_backofficetransaction
+  Rows: 0
+  Size: 0.09 MB
+  Primary Key: id
+
+Table: flatodd_banktransaction
+  Rows: 24045
+  Size: 3.33 MB
+  Primary Key: id
+
+Table: flatodd_betgroup
+  Rows: 1322
+  Size: 0.34 MB
+  Primary Key: id
+
+Table: flatodd_betgrouplocale
+  Rows: 63
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: flatodd_bettype
+  Rows: 18446
+  Size: 3.33 MB
+  Primary Key: id
+
+Table: flatodd_bettypelocale
+  Rows: 20
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: flatodd_branch
+  Rows: 1
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: flatodd_branchoddbasedstakelimitconfig
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: flatodd_branchrole
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: flatodd_branchtransaction
+  Rows: 0
+  Size: 0.08 MB
+  Primary Key: id
+
+Table: flatodd_client
+  Rows: 19
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: flatodd_clientdatablock
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: flatodd_clientrole
+  Rows: 829
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: flatodd_clientsetting
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: flatodd_club
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: flatodd_companynote
+  Rows: 4
+  Size: 0.09 MB
+  Primary Key: id
+
+Table: flatodd_configuration
+  Rows: 2
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: flatodd_confirmationcode
+  Rows: 554
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: flatodd_correctionamount
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: flatodd_dailybalanceinfo
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: flatodd_dataprovider
+  Rows: 1
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: flatodd_environmentconfig
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: flatodd_flatodd
+  Rows: 33388742
+  Size: 17879.63 MB
+  Primary Key: id
+
+Table: flatodd_frontpageimageconfiguration
+  Rows: 1
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: flatodd_highlightmatch
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: flatodd_historicalmainconfiguration
+  Rows: 45
+  Size: 0.13 MB
+  Primary Key: history_id
+
+Table: flatodd_importantnote
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: flatodd_item
+  Rows: 7228183
+  Size: 2391.47 MB
+  Primary Key: id
+
+Table: flatodd_itemcancelmessage
+  Rows: 1867
+  Size: 0.27 MB
+  Primary Key: id
+
+Table: flatodd_jackpot
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: flatodd_jackpotevent
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: flatodd_langlocale
+  Rows: 2
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: flatodd_league
+  Rows: 5220
+  Size: 1.38 MB
+  Primary Key: id
+
+Table: flatodd_leaguegroup
+  Rows: 2608
+  Size: 0.44 MB
+  Primary Key: id
+
+Table: flatodd_leaguegrouplocale
+  Rows: 1784
+  Size: 0.20 MB
+  Primary Key: id
+
+Table: flatodd_leaguelocale
+  Rows: 764
+  Size: 0.11 MB
+  Primary Key: id
+
+Table: flatodd_levydatablock
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: flatodd_mainconfiguration
+  Rows: 1
+  Size: 0.03 MB
+  Primary Key: configuration_ptr_id
+
+Table: flatodd_marketfilter
+  Rows: 133
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: flatodd_match
+  Rows: 1387719
+  Size: 569.25 MB
+  Primary Key: id
+
+Table: flatodd_matchbetfrequencystat
+  Rows: 19051
+  Size: 0.16 MB
+  Primary Key: id
+
+Table: flatodd_matchchangelog
+  Rows: 152517
+  Size: 9.03 MB
+  Primary Key: id
+
+Table: flatodd_member
+  Rows: 24162
+  Size: 13.45 MB
+  Primary Key: id
+
+Table: flatodd_memberclaim
+  Rows: 1514
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: flatodd_news
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: flatodd_offlineawardtransaction
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: flatodd_offlinecoupon
+  Rows: 64
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: flatodd_offlinecoupongamepick
+  Rows: 460
+  Size: 0.17 MB
+  Primary Key: id
+
+Table: flatodd_offlinejackpot
+  Rows: 0
+  Size: 0.09 MB
+  Primary Key: id
+
+Table: flatodd_offlinejackpotcoupon
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: flatodd_offlinejackpotcouponpick
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: flatodd_offlineticket
+  Rows: 0
+  Size: 0.23 MB
+  Primary Key: id
+
+Table: flatodd_onlinejackpot
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: flatodd_onlinejackpotpick
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: flatodd_onlineticket
+  Rows: 2620
+  Size: 2.39 MB
+  Primary Key: id
+
+Table: flatodd_onlineticketchangehistory
+  Rows: 1
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: flatodd_onlineticketgamepick
+  Rows: 31683
+  Size: 2.30 MB
+  Primary Key: id
+
+Table: flatodd_otp
+  Rows: 23
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: flatodd_promotiondescription
+  Rows: 5
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: flatodd_promotiondescriptiondescriptionlocale
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: flatodd_promotiondescriptiontitlelocale
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: flatodd_sales
+  Rows: 1
+  Size: 0.09 MB
+  Primary Key: id
+
+Table: flatodd_salesrole
+  Rows: 10
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: flatodd_season
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: flatodd_smsdriver
+  Rows: 1
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: flatodd_smstemplate
+  Rows: 1
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: flatodd_sporttype
+  Rows: 208
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: flatodd_sporttypelocale
+  Rows: 20
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: flatodd_streaksetting
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: flatodd_tag
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: flatodd_tasklog
+  Rows: 695207
+  Size: 193.06 MB
+  Primary Key: id
+
+Table: flatodd_team
+  Rows: 2362462
+  Size: 442.73 MB
+  Primary Key: id
+
+Table: flatodd_teamlocale
+  Rows: 1601227
+  Size: 122.69 MB
+  Primary Key: id
+
+Table: flatodd_teamnametag
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: flatodd_ticketconfirmactivity
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: flatodd_topbet
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: flatodd_topmatch
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: flatodd_transaction
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: flatodd_usertype
+  Rows: 24185
+  Size: 1.86 MB
+  Primary Key: id
+
+Table: flatodd_wallet
+  Rows: 19909
+  Size: 1.83 MB
+  Primary Key: id
+
+Table: flatodd_walletaudit
+  Rows: 270001
+  Size: 27.06 MB
+  Primary Key: id
+
+Table: flatodd_wallethistory
+  Rows: 303243
+  Size: 11.03 MB
+  Primary Key: id
+
+Table: flatodd_wallettemplog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: flatodd_wallettransaction
+  Rows: 6
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: flatodd_withdrawrequest
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: flatonline_policyconfiguration
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: configuration_ptr_id
+
+Table: flatreferal_firstbetfirstdepositfixedruleclaim
+  Rows: 1514
+  Size: 0.03 MB
+  Primary Key: memberclaim_ptr_id
+
+Table: flatreferal_firstbetreferalfixedruleclaim
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: memberclaim_ptr_id
+
+Table: flatreferal_payoutday
+  Rows: 1
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: flatreferal_recruiterinfo
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: flatreferal_referalfixedruleclaim
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: memberclaim_ptr_id
+
+Table: flatreferal_referalinfo
+  Rows: 1514
+  Size: 0.09 MB
+  Primary Key: id
+
+Table: flatreferal_referralinvoice
+  Rows: 28
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: flatreferal_referralinvoicereceipt
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: freebet_awardrule
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: freebet_betrule
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: rule_ptr_id
+
+Table: freebet_freebetconfiguration
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: configuration_ptr_id
+
+Table: freebet_registerrule
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: rule_ptr_id
+
+Table: freebet_rule
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: freebet_transaction
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: freshpay_depositpaymentrequest
+  Rows: 0
+  Size: 0.08 MB
+  Primary Key: id
+
+Table: freshpay_depositstatuschangelog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: freshpay_freshpayconfiguration
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: configuration_ptr_id
+
+Table: freshpay_withdrawpaymentrequest
+  Rows: 0
+  Size: 0.08 MB
+  Primary Key: id
+
+Table: freshpay_withdrawstatuschangelog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: genius_sport_geniussportmatch
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: golden_race_bet
+  Rows: 0
+  Size: 0.16 MB
+  Primary Key: id
+
+Table: golden_race_betpayout
+  Rows: 0
+  Size: 0.16 MB
+  Primary Key: id
+
+Table: golden_race_betrefund
+  Rows: 0
+  Size: 0.17 MB
+  Primary Key: id
+
+Table: golden_race_game
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: harifsport_coupon
+  Rows: 0
+  Size: 0.09 MB
+  Primary Key: id
+
+Table: harifsport_market
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: harifsport_markettype
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: harifsport_match
+  Rows: 0
+  Size: 0.08 MB
+  Primary Key: id
+
+Table: harifsport_matchpick
+  Rows: 0
+  Size: 0.08 MB
+  Primary Key: id
+
+Table: harifsport_matchtype
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: harifsport_player
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: harifsport_retailcoupon
+  Rows: 0
+  Size: 0.09 MB
+  Primary Key: id
+
+Table: harifsport_retailmatchpick
+  Rows: 0
+  Size: 0.08 MB
+  Primary Key: id
+
+Table: harifsport_transaction
+  Rows: 0
+  Size: 0.09 MB
+  Primary Key: id
+
+Table: hellocash_paymentrequest
+  Rows: 0
+  Size: 0.08 MB
+  Primary Key: id
+
+Table: hulusport_hulusportuser
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: hulusport_hulusportuserlegacy
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: hulusport_hulutransaction
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: hulusport_message
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: hulusport_ticketpurchase
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: instacash_depositpaymentrequest
+  Rows: 0
+  Size: 0.22 MB
+  Primary Key: id
+
+Table: instacash_depositstatuschangelog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: instacash_withdrawpaymentrequest
+  Rows: 0
+  Size: 0.16 MB
+  Primary Key: id
+
+Table: instacash_withdrawstatuschangelog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: kacha_depositpaymentrequest
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: kacha_historicalkachaconfiguration
+  Rows: 0
+  Size: 0.08 MB
+  Primary Key: history_id
+
+Table: kacha_kachaconfiguration
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: configuration_ptr_id
+
+Table: kacha_withdrawpaymentrequest
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: kironlite_bet
+  Rows: 0
+  Size: 0.08 MB
+  Primary Key: id
+
+Table: kironlite_betpayout
+  Rows: 0
+  Size: 0.11 MB
+  Primary Key: id
+
+Table: kironlite_betrefund
+  Rows: 0
+  Size: 0.11 MB
+  Primary Key: id
+
+Table: kironlite_game
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: kironlite_requestlog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: kra_krapaymentreference
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: kra_taxremittancejob
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: lenco_bank
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: lenco_depositpaymentrequest
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: lenco_lencoconfiguration
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: configuration_ptr_id
+
+Table: lenco_withdrawrequest
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: luckyleads_eventrequest
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: luckyleads_goalrequest
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: luckyleads_luckyleadscommissionsetting
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: luckyleads_luckyleadsconfiguration
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: marketing_campaign
+  Rows: 2
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: marketing_source
+  Rows: 2
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: marketing_utmcontent
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: marketing_utmmedium
+  Rows: 2
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: marketing_utmterm
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: marketing_utmurl
+  Rows: 7
+  Size: 0.11 MB
+  Primary Key: id
+
+Table: momopayment_configuration
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: momopayment_paymentrequest
+  Rows: 0
+  Size: 0.08 MB
+  Primary Key: id
+
+Table: mpesa_depositrequest
+  Rows: 0
+  Size: 0.11 MB
+  Primary Key: id
+
+Table: mpesa_et_depositpaymentrequest
+  Rows: 0
+  Size: 0.08 MB
+  Primary Key: id
+
+Table: mpesa_et_depositstatuschangelog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: mpesa_et_historicalmpesaetconfiguration
+  Rows: 0
+  Size: 0.08 MB
+  Primary Key: history_id
+
+Table: mpesa_et_mpesaetconfiguration
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: configuration_ptr_id
+
+Table: mpesa_et_withdrawpaymentrequest
+  Rows: 0
+  Size: 0.13 MB
+  Primary Key: id
+
+Table: mpesa_et_withdrawstatuschangelog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: mpesa_ke_depositpaymentrequest
+  Rows: 0
+  Size: 0.09 MB
+  Primary Key: id
+
+Table: mpesa_ke_depositstatuschangelog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: mpesa_ke_krapaymentrequest
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: mpesa_ke_krapaymentstatuschangelog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: mpesa_ke_withdrawpaymentrequest
+  Rows: 0
+  Size: 0.13 MB
+  Primary Key: id
+
+Table: mpesa_ke_withdrawstatuschangelog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: mpesa_withdrawrequest
+  Rows: 0
+  Size: 0.11 MB
+  Primary Key: id
+
+Table: oleq_depositpaymentrequest
+  Rows: 11657
+  Size: 1.81 MB
+  Primary Key: id
+
+Table: oleq_depositstatuschangelog
+  Rows: 8495
+  Size: 0.19 MB
+  Primary Key: id
+
+Table: oleq_historicaloleqconfiguration
+  Rows: 3
+  Size: 0.03 MB
+  Primary Key: history_id
+
+Table: oleq_oleqconfiguration
+  Rows: 1
+  Size: 0.02 MB
+  Primary Key: configuration_ptr_id
+
+Table: oleq_withdrawpaymentrequest
+  Rows: 4209
+  Size: 1.73 MB
+  Primary Key: id
+
+Table: oleq_withdrawstatuschangelog
+  Rows: 3331
+  Size: 0.17 MB
+  Primary Key: id
+
+Table: onlineagent_config
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: configuration_ptr_id
+
+Table: onlineagent_transaction
+  Rows: 3
+  Size: 0.11 MB
+  Primary Key: id
+
+Table: onlineagent_withdrawrequest
+  Rows: 0
+  Size: 0.08 MB
+  Primary Key: id
+
+Table: paytota_depositpaymentrequest
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: paytota_depositstatuschangelog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: paytota_paytotaconfiguration
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: configuration_ptr_id
+
+Table: paytota_withdrawpaymentrequest
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: paytota_withdrawstatuschangelog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: qtech_bet
+  Rows: 0
+  Size: 0.09 MB
+  Primary Key: id
+
+Table: qtech_betpayout
+  Rows: 0
+  Size: 0.11 MB
+  Primary Key: id
+
+Table: qtech_bonusstatus
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: qtech_currency
+  Rows: 76
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: qtech_game
+  Rows: 5263
+  Size: 27.39 MB
+  Primary Key: id
+
+Table: qtech_game_supported_currenices
+  Rows: 288861
+  Size: 26.55 MB
+  Primary Key: id
+
+Table: qtech_gamecategory
+  Rows: 68
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: qtech_gameprovider
+  Rows: 58
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: qtech_gametransactionreport
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: qtech_maincategory
+  Rows: 6
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: qtech_reward
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: qtech_rollback
+  Rows: 0
+  Size: 0.11 MB
+  Primary Key: id
+
+Table: qtech_tag
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: qtech_tag_games
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: qtech_taxreport
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: qtech_usertransactionreport
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: raffle_historicalrafflecampaign
+  Rows: 2
+  Size: 0.06 MB
+  Primary Key: history_id
+
+Table: raffle_prizedistribution
+  Rows: 2
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: raffle_rafflecampaign
+  Rows: 1
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: raffle_raffleconfiguration
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: raffle_raffleconfiguration_games
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: raffle_raffledraw
+  Rows: 1
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: raffle_raffleticket
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: raffle_raffleticketallocationpolicy
+  Rows: 1
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: raffle_raffleticketrange
+  Rows: 2
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: raffle_rafflewinner
+  Rows: 0
+  Size: 0.08 MB
+  Primary Key: id
+
+Table: sales_dailycashflowbalance
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: sales_dailyduplicateslip
+  Rows: 0
+  Size: 0.09 MB
+  Primary Key: id
+
+Table: sales_retailoperatinghours
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: santimpay_depositbank
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: santimpay_depositpaymentrequest
+  Rows: 0
+  Size: 0.16 MB
+  Primary Key: id
+
+Table: santimpay_depositstatuschangelog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: statuschangelog_ptr_id
+
+Table: santimpay_historicaldepositbank
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: history_id
+
+Table: santimpay_historicalsantimpayconfiguration
+  Rows: 0
+  Size: 0.08 MB
+  Primary Key: history_id
+
+Table: santimpay_historicalwithdrawbank
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: history_id
+
+Table: santimpay_santimpayconfiguration
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: configuration_ptr_id
+
+Table: santimpay_statuschangelog
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: santimpay_withdrawbank
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: santimpay_withdrawpaymentrequest
+  Rows: 0
+  Size: 0.14 MB
+  Primary Key: id
+
+Table: smsbet_messagelog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: smsbet_selectedmatch
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: smsbet_statestore
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: split_the_pot_bet
+  Rows: 0
+  Size: 0.11 MB
+  Primary Key: id
+
+Table: split_the_pot_betpayout
+  Rows: 0
+  Size: 0.13 MB
+  Primary Key: id
+
+Table: split_the_pot_betrefund
+  Rows: 0
+  Size: 0.13 MB
+  Primary Key: id
+
+Table: split_the_pot_game
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: sport_bespoke_bet_info
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: sport_bespoke_reports
+  Rows: 25
+  Size: 0.09 MB
+  Primary Key: id
+
+Table: sport_bespoke_sessions
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: super_jackpot_offlinesuperjackpotticket
+  Rows: 0
+  Size: 0.11 MB
+  Primary Key: id
+
+Table: super_jackpot_offlinesuperjackpotticketpick
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: super_jackpot_onlinesuperjackpotticket
+  Rows: 0
+  Size: 0.08 MB
+  Primary Key: id
+
+Table: super_jackpot_onlinesuperjackpotticketpick
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: super_jackpot_superjackpot
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: super_jackpot_superjackpotevent
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: super_jackpot_superjackpotprize
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: super_jackpot_superjackpotprizerule
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: superjackpot_jackpot
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: superjackpot_jackpoteventchoice
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: superjackpot_jackpotprize
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: superjackpot_offlinejackpotticket
+  Rows: 0
+  Size: 0.11 MB
+  Primary Key: id
+
+Table: superjackpot_offlinejackpotticketpick
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: superjackpot_onlinejackpotticket
+  Rows: 0
+  Size: 0.08 MB
+  Primary Key: id
+
+Table: superjackpot_onlinejackpotticketpick
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: telebirr_b2cpaymenetrequest
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: telebirr_paymentrequest
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: tournament_campaign
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: tournament_campaign_eligible_games
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: tournament_tournament
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: tournament_tournamentpoint
+  Rows: 0
+  Size: 0.08 MB
+  Primary Key: id
+
+Table: tournament_tournamentprizedistribution
+  Rows: 0
+  Size: 0.08 MB
+  Primary Key: id
+
+Table: tournament_tournamentsetting
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: id
+
+Table: tournament_tournamentwinner
+  Rows: 0
+  Size: 0.08 MB
+  Primary Key: id
+
+Table: unayo_depositpaymentrequest
+  Rows: 0
+  Size: 0.13 MB
+  Primary Key: id
+
+Table: unayo_depositstatuschangelog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: unayo_withdrawpaymentrequest
+  Rows: 0
+  Size: 0.09 MB
+  Primary Key: id
+
+Table: unayo_withdrawstatuschangelog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: unipesa_depositpaymentrequest
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: unipesa_depositstatuschangelog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: unipesa_unipesaconfiguration
+  Rows: 0
+  Size: 0.02 MB
+  Primary Key: configuration_ptr_id
+
+Table: unipesa_withdrawpaymentrequest
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: unipesa_withdrawstatuschangelog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: virtual_kirontransaction
+  Rows: 52
+  Size: 0.11 MB
+  Primary Key: id
+
+Table: wheel_spinning_reward
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: wheel_spinning_spin
+  Rows: 0
+  Size: 0.05 MB
+  Primary Key: id
+
+Table: wheel_spinning_spinchances
+  Rows: 0
+  Size: 0.08 MB
+  Primary Key: id
+
+Table: wheel_spinning_wheel
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: yo_uganda_depositpaymentrequest
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: yo_uganda_depositstatuschangelog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+
+Table: yo_uganda_withdrawpaymentrequest
+  Rows: 0
+  Size: 0.06 MB
+  Primary Key: id
+
+Table: yo_uganda_withdrawstatuschangelog
+  Rows: 0
+  Size: 0.03 MB
+  Primary Key: id
+

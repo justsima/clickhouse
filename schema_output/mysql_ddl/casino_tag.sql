@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+casino_tag	CREATE TABLE "casino_tag" (\n  "id" char(32) NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "name" varchar(100) NOT NULL,\n  "description" longtext,\n  "logo" varchar(100) DEFAULT NULL,\n  "order" int NOT NULL,\n  "template" varchar(20) NOT NULL,\n  "slug" varchar(100) DEFAULT NULL,\n  "display_on" varchar(20) NOT NULL,\n  "sport_book_order" int NOT NULL,\n  PRIMARY KEY ("id"),\n  KEY "casino_tag_slug_14826c_idx" ("slug"),\n  KEY "casino_tag_slug_a81ced98" ("slug")\n)

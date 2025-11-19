@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+oleq_oleqconfiguration	CREATE TABLE "oleq_oleqconfiguration" (\n  "configuration_ptr_id" int NOT NULL,\n  "country_code" varchar(5) NOT NULL,\n  "api_key" varchar(100) DEFAULT NULL,\n  "auth_key" varchar(100) DEFAULT NULL,\n  "b2c_short_code" varchar(10) DEFAULT NULL,\n  "c2b_short_code" varchar(10) DEFAULT NULL,\n  "base_url" varchar(200) NOT NULL,\n  "b2c_callback_url" varchar(200) NOT NULL,\n  "c2b_callback_url" varchar(200) NOT NULL,\n  PRIMARY KEY ("configuration_ptr_id"),\n  CONSTRAINT "oleq_oleqconfigurati_configuration_ptr_id_f95db334_fk_flatodd_c" FOREIGN KEY ("configuration_ptr_id") REFERENCES "flatodd_configuration" ("id")\n)

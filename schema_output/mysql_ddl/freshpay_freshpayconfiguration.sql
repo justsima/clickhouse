@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+freshpay_freshpayconfiguration	CREATE TABLE "freshpay_freshpayconfiguration" (\n  "configuration_ptr_id" int NOT NULL,\n  "base_url" varchar(200) NOT NULL,\n  "currency" varchar(3) NOT NULL,\n  "merchant_id" varchar(50) DEFAULT NULL,\n  "merchant_secret" varchar(50) DEFAULT NULL,\n  "merchant_first_name" varchar(50) DEFAULT NULL,\n  "merchant_last_name" varchar(50) DEFAULT NULL,\n  "b2c_callback_url" varchar(200) NOT NULL,\n  "c2b_callback_url" varchar(200) NOT NULL,\n  PRIMARY KEY ("configuration_ptr_id"),\n  CONSTRAINT "freshpay_freshpaycon_configuration_ptr_id_54be1837_fk_flatodd_c" FOREIGN KEY ("configuration_ptr_id") REFERENCES "flatodd_configuration" ("id")\n)

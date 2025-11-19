@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+freebet_registerrule	CREATE TABLE "freebet_registerrule" (\n  "rule_ptr_id" bigint NOT NULL,\n  "award_rule_id" bigint NOT NULL,\n  PRIMARY KEY ("rule_ptr_id"),\n  KEY "freebet_registerrule_award_rule_id_4d32035b_fk_freebet_a" ("award_rule_id"),\n  CONSTRAINT "freebet_registerrule_award_rule_id_4d32035b_fk_freebet_a" FOREIGN KEY ("award_rule_id") REFERENCES "freebet_awardrule" ("id"),\n  CONSTRAINT "freebet_registerrule_rule_ptr_id_bd9240a2_fk_freebet_rule_id" FOREIGN KEY ("rule_ptr_id") REFERENCES "freebet_rule" ("id")\n)

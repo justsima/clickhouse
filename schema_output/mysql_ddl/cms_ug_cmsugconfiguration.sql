@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+cms_ug_cmsugconfiguration	CREATE TABLE "cms_ug_cmsugconfiguration" (\n  "configuration_ptr_id" int NOT NULL,\n  "base_url" varchar(200) DEFAULT NULL,\n  "brand_id" varchar(100) DEFAULT NULL,\n  "operator_id" varchar(100) DEFAULT NULL,\n  "access_token" varchar(200) DEFAULT NULL,\n  "license_number" varchar(100) DEFAULT NULL,\n  PRIMARY KEY ("configuration_ptr_id"),\n  CONSTRAINT "cms_ug_cmsugconfigur_configuration_ptr_id_fd1ff5f4_fk_flatodd_c" FOREIGN KEY ("configuration_ptr_id") REFERENCES "flatodd_configuration" ("id")\n)

@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+crm_dailytracker	CREATE TABLE "crm_dailytracker" (\n  "id" bigint NOT NULL AUTO_INCREMENT,\n  "has_deposit" tinyint(1) NOT NULL,\n  "has_bet" tinyint(1) NOT NULL,\n  "has_withdraw" tinyint(1) NOT NULL,\n  "timestamp" date NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "user_id" int NOT NULL,\n  PRIMARY KEY ("id"),\n  UNIQUE KEY "crm_dailytracker_user_id_timestamp_b645c50d_uniq" ("user_id","timestamp"),\n  CONSTRAINT "crm_dailytracker_user_id_b483efc3_fk_auth_user_id" FOREIGN KEY ("user_id") REFERENCES "auth_user" ("id")\n)

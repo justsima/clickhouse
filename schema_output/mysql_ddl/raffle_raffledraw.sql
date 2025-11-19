@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+raffle_raffledraw	CREATE TABLE "raffle_raffledraw" (\n  "id" bigint NOT NULL AUTO_INCREMENT,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  "start_date" datetime(6) NOT NULL,\n  "end_date" datetime(6) NOT NULL,\n  "is_approved" tinyint(1) NOT NULL,\n  "status" varchar(20) NOT NULL,\n  "campaign_id" bigint NOT NULL,\n  PRIMARY KEY ("id"),\n  KEY "raffle_raffledraw_campaign_id_ca24846d_fk_raffle_ra" ("campaign_id"),\n  CONSTRAINT "raffle_raffledraw_campaign_id_ca24846d_fk_raffle_ra" FOREIGN KEY ("campaign_id") REFERENCES "raffle_rafflecampaign" ("id")\n)

@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+harifsport_markettype	CREATE TABLE "harifsport_markettype" (\n  "id" bigint NOT NULL AUTO_INCREMENT,\n  "name" varchar(255) NOT NULL,\n  "market_id" bigint NOT NULL,\n  "created_at" datetime(6) NOT NULL,\n  "updated_at" datetime(6) NOT NULL,\n  PRIMARY KEY ("id"),\n  UNIQUE KEY "name" ("name"),\n  UNIQUE KEY "harifsport_markettype_name_market_id_1f2c856d_uniq" ("name","market_id"),\n  KEY "harifsport_markettype_market_id_aaa6be43_fk_harifsport_market_id" ("market_id"),\n  CONSTRAINT "harifsport_markettype_market_id_aaa6be43_fk_harifsport_market_id" FOREIGN KEY ("market_id") REFERENCES "harifsport_market" ("id")\n)

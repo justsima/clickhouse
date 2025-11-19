@@ -1,0 +1,3 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Table	Create Table
+auth_user	CREATE TABLE "auth_user" (\n  "id" int NOT NULL AUTO_INCREMENT,\n  "password" varchar(128) NOT NULL,\n  "last_login" datetime(6) DEFAULT NULL,\n  "is_superuser" tinyint(1) NOT NULL,\n  "username" varchar(150) NOT NULL,\n  "first_name" varchar(150) NOT NULL,\n  "last_name" varchar(150) NOT NULL,\n  "email" varchar(254) NOT NULL,\n  "is_staff" tinyint(1) NOT NULL,\n  "is_active" tinyint(1) NOT NULL,\n  "date_joined" datetime(6) NOT NULL,\n  PRIMARY KEY ("id"),\n  UNIQUE KEY "username" ("username")\n)
