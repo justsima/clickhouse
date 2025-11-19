@@ -42,14 +42,14 @@ fi
 print_info "Installing ClickHouse Kafka Connect connector..."
 echo ""
 
-# Method 1: Try GitHub releases (all-in-one JAR from releases page)
-print_info "Method 1: Trying GitHub releases..."
+# Method 1: Try Maven Central (most reliable)
+print_info "Method 1: Trying Maven Central..."
 docker exec kafka-connect-clickhouse bash -c '
     mkdir -p /kafka/connect/clickhouse-kafka &&
     cd /kafka/connect/clickhouse-kafka &&
-    # Download the all-in-one shaded JAR
+    # Download the all-in-one shaded JAR from Maven Central
     curl -L -o clickhouse-kafka-connect.jar \
-      "https://github.com/ClickHouse/clickhouse-kafka-connect/releases/download/v1.0.13/clickhouse-kafka-connect-1.0.13-all.jar" 2>&1
+      "https://repo1.maven.org/maven2/com/clickhouse/clickhouse-kafka-connect/1.0.13/clickhouse-kafka-connect-1.0.13-all.jar" 2>&1
 ' | grep -v "^\s*$"
 
 # Verify installation
