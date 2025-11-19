@@ -1,10 +1,22 @@
 CREATE TABLE IF NOT EXISTS analytics.`onlineagent_withdrawrequest`
 (
-    `state` String,
+    `id` Int64,
+    `amount` Decimal64(2),
+    `uuid` UUID,
+    `otp` String,
+    `state` UInt16,
+    `commited_at` DateTime64(6, 'UTC') DEFAULT toDateTime(0),
+    `created_at` DateTime64(6, 'UTC'),
+    `updated_at` DateTime64(6, 'UTC'),
+    `user_id` Int32,
+    `agent_id` Int32,
+    `transaction_id` Int64 DEFAULT 0,
     `_version` UInt64 DEFAULT 0,
     `_is_deleted` UInt8 DEFAULT 0,
     `_extracted_at` DateTime DEFAULT now()
 )
-ENGINE = ReplacingMergeTree(_version)
-ORDER BY tuple()
-SETTINGS index_granularity = 8192;
+ENGINE = ReplacingMergeTree(_version, _is_deleted)
+ORDER BY (`id`)
+PARTITION BY toYYYYMM(`created_at`)
+SETTINGS clean_deleted_rows = 'Always',
+         index_granularity = 8192;

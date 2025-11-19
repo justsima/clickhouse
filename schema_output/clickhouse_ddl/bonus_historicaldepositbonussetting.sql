@@ -1,18 +1,45 @@
 CREATE TABLE IF NOT EXISTS analytics.`bonus_historicaldepositbonussetting`
 (
-    `award_amount_type` String,
-    `redeem_type` String,
-    `bonus_type` String,
-    `activation_type` String,
-    `withdraw_wallet_type` String,
-    `status` String,
-    `contribution_platform` String,
-    `happy_hour_days` String,
-    `game_restriction_type` String,
+    `id` String,
+    `start_time` DateTime64(6, 'UTC'),
+    `end_time` DateTime64(6, 'UTC'),
+    `award_amount` Decimal64(2),
+    `award_amount_type` UInt16,
+    `validity_period` Int64,
+    `rollover_multiplier` Float64,
+    `sms_notification` Bool,
+    `promo_code` String,
+    `redeem_type` UInt16,
+    `bonus_type` UInt16,
+    `activation_type` UInt16,
+    `withdraw_wallet_type` UInt16,
+    `sms_notification_template` String,
+    `status` UInt16,
+    `created_at` DateTime64(6, 'UTC'),
+    `updated_at` DateTime64(6, 'UTC'),
+    `history_id` Int32,
+    `history_date` DateTime64(6, 'UTC'),
+    `history_change_reason` String DEFAULT '',
+    `history_type` LowCardinality(String),
+    `history_user_id` Int32 DEFAULT 0,
+    `wagering_policy_id` Int32 DEFAULT 0,
+    `award_sms_notification` Bool,
+    `award_sms_notification_template` String,
+    `max_bonus_award_amount` Nullable(Decimal64(2)),
+    `promotion_description_id` Int32 DEFAULT 0,
+    `contribution_platform` UInt16,
+    `happy_hour_days` UInt16 DEFAULT 0,
+    `happy_hour_end_time` String DEFAULT '',
+    `happy_hour_maximum_awarded_quantity` Int32,
+    `happy_hour_start_time` String DEFAULT '',
+    `game_restriction_type` UInt16,
+    `wheel_id` Int64 DEFAULT 0,
     `_version` UInt64 DEFAULT 0,
     `_is_deleted` UInt8 DEFAULT 0,
     `_extracted_at` DateTime DEFAULT now()
 )
-ENGINE = ReplacingMergeTree(_version)
-ORDER BY tuple()
-SETTINGS index_granularity = 8192;
+ENGINE = ReplacingMergeTree(_version, _is_deleted)
+ORDER BY (`history_id`)
+PARTITION BY toYYYYMM(`created_at`)
+SETTINGS clean_deleted_rows = 'Always',
+         index_granularity = 8192;

@@ -1,9 +1,46 @@
 CREATE TABLE IF NOT EXISTS analytics.`flatodd_smstemplate`
 (
+    `id` Int32,
+    `template_name` String,
+    `support_bulk_personalize_message` Bool,
+    `registration_verification_code_message` String,
+    `phone_number_registration_message` Int32,
+    `password_reset_verification_code_message` String,
+    `deposit_success_message` String,
+    `bet_placed_message` String,
+    `jackpot_placed_message` String,
+    `bet_cancelled_message` String,
+    `bet_won_message` String,
+    `bonus_awarded_message` String,
+    `spin_prize_awarded_message` String,
+    `spin_prize_freebet_awarded_message` String,
+    `spin_prize_in_kind_awarded_message` String,
+    `branch_withdrawal_message` String,
+    `branch_deposit_message` String,
+    `online_agent_deposit_message` String,
+    `online_agent_bet_placed_message` String,
+    `registration_wellcome_message` String,
+    `download_ready_message` String,
+    `branch_withdrawal_code_message` String,
+    `withdrawal_only_at_branch_message` String,
+    `authorize_withdrawl_request_message` String,
+    `wallet_debited_message` String,
+    `cashier_request_withdrawal_message` String,
+    `loyalty_bonus_awarded_message` String,
+    `agent_prepaid_deposit_message` String,
+    `prepaid_credit_message` String,
+    `prepaid_deposit_message` String,
+    `prepaid_withdraw_message` String,
+    `tournament_award_message` String,
+    `raffle_award_inkind_message` String,
+    `raffle_award_message` String,
+    `raffle_ticket_generated_message` String,
+    `casino_cashback_template` String,
     `_version` UInt64 DEFAULT 0,
     `_is_deleted` UInt8 DEFAULT 0,
     `_extracted_at` DateTime DEFAULT now()
 )
-ENGINE = ReplacingMergeTree(_version)
-ORDER BY tuple()
-SETTINGS index_granularity = 8192;
+ENGINE = ReplacingMergeTree(_version, _is_deleted)
+ORDER BY (`id`)
+SETTINGS clean_deleted_rows = 'Always',
+         index_granularity = 8192;
