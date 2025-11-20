@@ -31,6 +31,11 @@
     "value.converter": "org.apache.kafka.connect.json.JsonConverter",
     "value.converter.schemas.enable": "false",
 
+    "transforms": "topicToTable",
+    "transforms.topicToTable.type": "org.apache.kafka.connect.transforms.RegexRouter",
+    "transforms.topicToTable.regex": "mysql\\.${MYSQL_DATABASE}\\.(.*)",
+    "transforms.topicToTable.replacement": "$1",
+
     "tableMapping": "auto",
     "ignoreUnknownColumns": "true",
     "timeoutSeconds": "30"
