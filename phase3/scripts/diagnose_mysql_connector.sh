@@ -53,11 +53,11 @@ echo ""
 print_section "1. Connector Status Check"
 
 # Check connector exists
-CONNECTOR_EXISTS=$(curl -s http://localhost:8083/connectors | grep -c "mysql-source-connector")
+CONNECTOR_EXISTS=$(curl -s http://localhost:8085/connectors | grep -c "mysql-source-connector")
 if [ "$CONNECTOR_EXISTS" -eq 0 ]; then
     print_error "Connector 'mysql-source-connector' not found"
     echo "Available connectors:"
-    curl -s http://localhost:8083/connectors | python3 -m json.tool 2>/dev/null
+    curl -s http://localhost:8085/connectors | python3 -m json.tool 2>/dev/null
     exit 1
 else
     print_status 0 "Connector exists"
@@ -66,10 +66,10 @@ fi
 # Get full status
 echo ""
 print_info "Full connector status:"
-curl -s http://localhost:8083/connectors/mysql-source-connector/status | python3 -m json.tool 2>/dev/null
+curl -s http://localhost:8085/connectors/mysql-source-connector/status | python3 -m json.tool 2>/dev/null
 
 # Check task count
-TASK_COUNT=$(curl -s http://localhost:8083/connectors/mysql-source-connector/status | grep -o '"tasks":\[.*\]' | grep -o '"id":[0-9]*' | wc -l)
+TASK_COUNT=$(curl -s http://localhost:8085/connectors/mysql-source-connector/status | grep -o '"tasks":\[.*\]' | grep -o '"id":[0-9]*' | wc -l)
 echo ""
 print_info "Task count: $TASK_COUNT (expected: 1)"
 
@@ -117,14 +117,14 @@ echo ""
 print_section "3. Connector Configuration Check"
 
 print_info "Current connector configuration:"
-curl -s http://localhost:8083/connectors/mysql-source-connector | python3 -m json.tool 2>/dev/null | grep -A 20 '"config"'
+curl -s http://localhost:8085/connectors/mysql-source-connector | python3 -m json.tool 2>/dev/null | grep -A 20 '"config"'
 
 echo ""
 print_info "Key configuration values:"
 echo "  Database host: $MYSQL_HOST"
 echo "  Database port: $MYSQL_PORT"
 echo "  Database: $MYSQL_DATABASE"
-echo "  Tasks max: $(curl -s http://localhost:8083/connectors/mysql-source-connector | python3 -c 'import sys,json; print(json.load(sys.stdin)["config"].get("tasks.max", "NOT SET"))' 2>/dev/null)"
+echo "  Tasks max: $(curl -s http://localhost:8085/connectors/mysql-source-connector | python3 -c 'import sys,json; print(json.load(sys.stdin)["config"].get("tasks.max", "NOT SET"))' 2>/dev/null)"
 
 echo ""
 print_section "4. Kafka Connect Logs Analysis"
@@ -148,18 +148,18 @@ echo ""
 print_section "5. Connector Plugin Verification"
 
 print_info "Checking if Debezium MySQL connector plugin is loaded..."
-PLUGIN_LOADED=$(curl -s http://localhost:8083/connector-plugins | grep -c "MySqlConnector")
+PLUGIN_LOADED=$(curl -s http://localhost:8085/connector-plugins | grep -c "MySqlConnector")
 
 if [ "$PLUGIN_LOADED" -gt 0 ]; then
     print_status 0 "Debezium MySQL connector plugin is loaded"
     echo ""
     echo "Plugin details:"
-    curl -s http://localhost:8083/connector-plugins | python3 -m json.tool 2>/dev/null | grep -A 3 "MySql"
+    curl -s http://localhost:8085/connector-plugins | python3 -m json.tool 2>/dev/null | grep -A 3 "MySql"
 else
     print_status 1 "Debezium MySQL connector plugin NOT found"
     echo ""
     echo "Available plugins:"
-    curl -s http://localhost:8083/connector-plugins | python3 -m json.tool 2>/dev/null
+    curl -s http://localhost:8085/connector-plugins | python3 -m json.tool 2>/dev/null
 fi
 
 echo ""
@@ -204,7 +204,7 @@ if [ "$ISSUES_FOUND" -eq 0 ]; then
     echo "The connector may be experiencing an internal error."
     echo "Recommended actions:"
     echo "  1. Check full Kafka Connect logs: docker logs kafka-connect-clickhouse | less"
-    echo "  2. Try restarting the connector: curl -X POST http://localhost:8083/connectors/mysql-source-connector/restart"
+    echo "  2. Try restarting the connector: curl -X POST http://localhost:8085/connectors/mysql-source-connector/restart"
     echo "  3. If issues persist, delete and redeploy connector"
 else
     echo ""
@@ -218,7 +218,7 @@ if [ "$TASK_COUNT" -eq 0 ]; then
     echo "To fix the 0 tasks issue:"
     echo ""
     echo "Option 1: Delete and redeploy connector"
-    echo "  curl -X DELETE http://localhost:8083/connectors/mysql-source-connector"
+    echo "  curl -X DELETE http://localhost:8085/connectors/mysql-source-connector"
     echo "  cd $SCRIPT_DIR"
     echo "  ./03_deploy_connectors.sh"
     echo ""

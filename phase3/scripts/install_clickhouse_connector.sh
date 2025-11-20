@@ -66,7 +66,7 @@ if docker exec kafka-connect-clickhouse test -f /kafka/connect/clickhouse-kafka/
         echo ""
         print_info "Waiting for Kafka Connect to be ready..."
         for i in {1..24}; do
-            if curl -s http://localhost:8083/ 2>/dev/null | grep -q "version"; then
+            if curl -s http://localhost:8085/ 2>/dev/null | grep -q "version"; then
                 print_status 0 "Kafka Connect ready"
                 break
             fi
@@ -79,11 +79,11 @@ if docker exec kafka-connect-clickhouse test -f /kafka/connect/clickhouse-kafka/
         print_info "Verifying connector is available..."
         sleep 5
 
-        if curl -s http://localhost:8083/connector-plugins 2>/dev/null | grep -q "ClickHouseSinkConnector"; then
+        if curl -s http://localhost:8085/connector-plugins 2>/dev/null | grep -q "ClickHouseSinkConnector"; then
             print_status 0 "ClickHouse Kafka Connect Sink connector is available!"
             echo ""
             echo "Connector details:"
-            curl -s http://localhost:8083/connector-plugins 2>/dev/null | grep -A 2 "ClickHouse"
+            curl -s http://localhost:8085/connector-plugins 2>/dev/null | grep -A 2 "ClickHouse"
             echo ""
             echo "========================================"
             echo "   Installation Complete!"
