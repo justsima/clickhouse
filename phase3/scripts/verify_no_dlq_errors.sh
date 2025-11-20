@@ -70,7 +70,12 @@ else
     print_info "DLQ topic exists, checking for messages..."
 
     DLQ_INFO=$(docker exec redpanda-clickhouse rpk topic describe clickhouse-dlq --brokers localhost:9092 2>/dev/null)
-    DLQ_MESSAGES=$(echo "$DLQ_INFO" | grep -i "high water mark" | awk '{sum+=$4} END {print sum}' || echo "0")
+    DLQ_MESSAGES=$(echo "$DLQ_INFO" | grep -E "^[0-9]+" | awk 'NR==2 {print $5}' || echo "0")
+
+    # Ensure it's a valid number
+    if ! [[ "$DLQ_MESSAGES" =~ ^[0-9]+$ ]]; then
+        DLQ_MESSAGES=0
+    fi
 
     if [ "$DLQ_MESSAGES" -eq 0 ]; then
         print_status 0 "DLQ exists but has 0 messages (GOOD)"
@@ -262,6 +267,11 @@ fi
 # ============================================================
 
 print_section "SUMMARY"
+
+# Ensure all variables are valid numbers
+if ! [[ "$DLQ_MESSAGES" =~ ^[0-9]+$ ]]; then DLQ_MESSAGES=0; fi
+if ! [[ "$TOPICS_WITH_DATA" =~ ^[0-9]+$ ]]; then TOPICS_WITH_DATA=0; fi
+if ! [[ "$TABLES_WITH_DATA" =~ ^[0-9]+$ ]]; then TABLES_WITH_DATA=0; fi
 
 echo ""
 echo "Status Check:"
