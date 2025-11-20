@@ -69,7 +69,7 @@ substitute_vars() {
 echo "1. Checking Kafka Connect Status"
 echo "---------------------------------"
 
-CONNECT_URL="http://localhost:8085"
+CONNECT_URL="http://localhost:8083"
 
 if curl -s "$CONNECT_URL/" | grep -q "version"; then
     print_status 0 "Kafka Connect is running"
@@ -169,7 +169,7 @@ done
 
 if [ -z "$CONNECTORS" ]; then
     print_error "Could not retrieve connector plugins from Kafka Connect"
-    echo "Try manually: curl http://localhost:8085/connector-plugins"
+    echo "Try manually: curl http://localhost:8083/connector-plugins"
     exit 1
 fi
 
