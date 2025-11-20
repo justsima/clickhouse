@@ -62,7 +62,7 @@ echo ""
 echo "1. Stopping Kafka Connect Connectors"
 echo "-------------------------------------"
 
-CONNECT_URL="http://localhost:8083"
+CONNECT_URL="http://localhost:8085"
 
 # Get list of connectors
 CONNECTORS=$(curl -s "$CONNECT_URL/connectors" 2>/dev/null)
