@@ -39,39 +39,105 @@ echo -e "${YELLOW}These containers are from your old setup (4 weeks ago)${NC}"
 echo -e "${YELLOW}They conflict with your new ClickHouse CDC environment${NC}"
 echo ""
 
-print_section "Step 1: Identify Old Containers"
+print_section "Step 1: Current Container Inventory"
 
-echo "Scanning for old containers..."
+echo "Scanning all containers to identify what to delete..."
 echo ""
 
-# List all old containers
-OLD_CONTAINERS=$(docker ps -a --filter "name=kafka-connect" --filter "name=kafka" --filter "name=postgres-sink" --format "{{.Names}}" | grep -v "clickhouse" || true)
+# Show EVERYTHING first so user can see the full picture
+echo -e "${BOLD}All containers on this system:${NC}"
+docker ps -a --format "  {{.Names}}: {{.Status}} ({{.Image}})" | sort
 
-if [ -z "$OLD_CONTAINERS" ]; then
-    echo -e "${GREEN}✓ No old containers found${NC}"
+echo ""
+echo "─────────────────────────────────────────────────────"
+echo ""
+
+# Define EXACTLY which containers to target (by exact name)
+# These are the OLD Kafka environment containers from 4 weeks ago
+TARGET_CONTAINERS="kafka-connect kafka zookeeper postgres-sink"
+
+echo -e "${BOLD}${RED}Containers targeted for DELETION:${NC}"
+echo -e "${YELLOW}These are from the OLD Kafka setup (4 weeks ago):${NC}"
+echo ""
+
+FOUND_CONTAINERS=""
+for container in $TARGET_CONTAINERS; do
+    # Check if this exact container name exists
+    if docker ps -a --format "{{.Names}}" | grep -q "^${container}$"; then
+        STATUS=$(docker ps -a --filter "name=^${container}$" --format "{{.Status}}")
+        IMAGE=$(docker ps -a --filter "name=^${container}$" --format "{{.Image}}")
+        echo -e "  ${RED}✗ DELETE${NC} → $container"
+        echo -e "             Status: $STATUS"
+        echo -e "             Image:  $IMAGE"
+        echo ""
+        FOUND_CONTAINERS="$FOUND_CONTAINERS $container"
+    fi
+done
+
+if [ -z "$FOUND_CONTAINERS" ]; then
+    echo -e "${GREEN}✓ None of the old Kafka containers found${NC}"
     echo ""
     echo "Your environment is already clean!"
     exit 0
 fi
 
-echo "Found old containers:"
-for container in $OLD_CONTAINERS; do
-    STATUS=$(docker ps -a --filter "name=$container" --format "{{.Status}}")
-    echo -e "  ${YELLOW}→${NC} $container ($STATUS)"
-done
+# Trim leading space
+FOUND_CONTAINERS=$(echo "$FOUND_CONTAINERS" | sed 's/^ //')
+
+echo "─────────────────────────────────────────────────────"
+echo ""
 
 # Check kafka-ui separately
-echo ""
 if docker ps -a --format "{{.Names}}" | grep -q "^kafka-ui$"; then
-    KAFKA_UI_STATUS=$(docker ps -a --filter "name=kafka-ui" --format "{{.Status}}")
-    echo -e "${BLUE}Note:${NC} Found kafka-ui container ($KAFKA_UI_STATUS)"
-    echo "  This might be used for monitoring. Should we delete it too?"
+    KAFKA_UI_STATUS=$(docker ps -a --filter "name=^kafka-ui$" --format "{{.Status}}")
+    KAFKA_UI_IMAGE=$(docker ps -a --filter "name=^kafka-ui$" --format "{{.Image}}")
+    echo -e "${BLUE}Optional deletion:${NC}"
+    echo -e "  kafka-ui"
+    echo -e "    Status: $KAFKA_UI_STATUS"
+    echo -e "    Image:  $KAFKA_UI_IMAGE"
+    echo ""
+    echo "  This might be used for Kafka monitoring."
+    echo "  It's part of the old setup but may still be useful."
     echo ""
     read -p "Delete kafka-ui as well? (yes/no): " DELETE_UI
     if [ "$DELETE_UI" = "yes" ]; then
-        OLD_CONTAINERS="$OLD_CONTAINERS kafka-ui"
+        FOUND_CONTAINERS="$FOUND_CONTAINERS kafka-ui"
     fi
 fi
+
+echo ""
+echo -e "${BOLD}${GREEN}Containers that will NOT be touched (safe):${NC}"
+echo ""
+
+# Show what we're NOT deleting
+SAFE_CONTAINERS="kafka-connect-clickhouse redpanda-clickhouse redpanda-console-clickhouse clickhouse-server mysql-container pg-staging pg-schema pgloader-remote"
+
+for container in $SAFE_CONTAINERS; do
+    # Use wildcard for pgloader since it has timestamp
+    if [ "$container" = "pgloader-remote" ]; then
+        MATCHES=$(docker ps -a --format "{{.Names}}" | grep "^pgloader-remote" || true)
+        for match in $MATCHES; do
+            if docker ps -a --format "{{.Names}}" | grep -q "^${match}$"; then
+                STATUS=$(docker ps -a --filter "name=^${match}$" --format "{{.Status}}")
+                echo -e "  ${GREEN}✓ KEEP${NC} → $match ($STATUS)"
+            fi
+        done
+    else
+        if docker ps -a --format "{{.Names}}" | grep -q "^${container}$"; then
+            STATUS=$(docker ps -a --filter "name=^${container}$" --format "{{.Status}}")
+            echo -e "  ${GREEN}✓ KEEP${NC} → $container ($STATUS)"
+        fi
+    fi
+done
+
+# Also check for gitlab-runner
+if docker ps -a --format "{{.Names}}" | grep -q "^gitlab-runner$"; then
+    STATUS=$(docker ps -a --filter "name=^gitlab-runner$" --format "{{.Status}}")
+    echo -e "  ${GREEN}✓ KEEP${NC} → gitlab-runner ($STATUS)"
+fi
+
+echo ""
+OLD_CONTAINERS="$FOUND_CONTAINERS"
 
 print_section "Step 2: Confirmation"
 
