@@ -261,14 +261,15 @@ elif echo "$RESPONSE" | grep -q "error"; then
 fi
 
 echo ""
-echo "6. Verifying Connector Status"
-echo "------------------------------"
+echo "6. Verifying Connector Status and Tasks"
+echo "----------------------------------------"
 
 sleep 5
 
 # Check Debezium status
 print_info "Checking Debezium MySQL source connector..."
-DEBEZIUM_STATUS=$(curl -s "$CONNECT_URL/connectors/mysql-source-connector/status" 2>/dev/null | grep -o '"state":"[^"]*"' | head -1 | cut -d'"' -f4 || echo "UNKNOWN")
+DEBEZIUM_STATUS_JSON=$(curl -s "$CONNECT_URL/connectors/mysql-source-connector/status" 2>/dev/null)
+DEBEZIUM_STATUS=$(echo "$DEBEZIUM_STATUS_JSON" | grep -o '"state":"[^"]*"' | head -1 | cut -d'"' -f4 || echo "UNKNOWN")
 
 if [ "$DEBEZIUM_STATUS" = "RUNNING" ]; then
     print_status 0 "Debezium connector status: $DEBEZIUM_STATUS"
@@ -277,18 +278,66 @@ else
     echo "Check logs: docker logs kafka-connect-clickhouse | tail -50"
 fi
 
+# CRITICAL: Check if MySQL source connector tasks are created
+MYSQL_TASK_COUNT=$(echo "$DEBEZIUM_STATUS_JSON" | python3 -c "import sys,json; print(len(json.load(sys.stdin).get('tasks',[])))" 2>/dev/null || echo "0")
+MYSQL_EXPECTED_TASKS=1
+
+echo -n "  MySQL Source Tasks: "
+if [ "$MYSQL_TASK_COUNT" -eq "$MYSQL_EXPECTED_TASKS" ]; then
+    echo -e "${GREEN}$MYSQL_TASK_COUNT/$MYSQL_EXPECTED_TASKS created${NC}"
+
+    # Check task states
+    MYSQL_RUNNING_TASKS=$(echo "$DEBEZIUM_STATUS_JSON" | python3 -c "import sys,json; tasks=json.load(sys.stdin).get('tasks',[]); print(sum(1 for t in tasks if t.get('state')=='RUNNING'))" 2>/dev/null || echo "0")
+    if [ "$MYSQL_RUNNING_TASKS" -eq "$MYSQL_EXPECTED_TASKS" ]; then
+        print_status 0 "  All $MYSQL_RUNNING_TASKS tasks are RUNNING"
+    else
+        echo -e "${YELLOW}⚠ Warning: Only $MYSQL_RUNNING_TASKS/$MYSQL_EXPECTED_TASKS tasks are RUNNING${NC}"
+    fi
+else
+    echo -e "${RED}$MYSQL_TASK_COUNT/$MYSQL_EXPECTED_TASKS - NO TASKS CREATED!${NC}"
+    echo -e "${RED}✗ CRITICAL: MySQL source connector has no tasks${NC}"
+    echo ""
+    echo "This means the snapshot cannot start!"
+    echo "Possible causes:"
+    echo "  • MySQL binlog not enabled"
+    echo "  • Missing MySQL user permissions (REPLICATION SLAVE/CLIENT)"
+    echo "  • MySQL connectivity issues"
+    echo ""
+    echo "Run diagnostic: ./diagnose_mysql_connector.sh"
+fi
+
+echo ""
+
 # Check ClickHouse sink status
 print_info "Checking ClickHouse Kafka Connect sink connector..."
-SINK_STATUS=$(curl -s "$CONNECT_URL/connectors/clickhouse-sink-connector/status" 2>/dev/null | grep -o '"state":"[^"]*"' | head -1 | cut -d'"' -f4 || echo "NOT_DEPLOYED")
+SINK_STATUS_JSON=$(curl -s "$CONNECT_URL/connectors/clickhouse-sink-connector/status" 2>/dev/null)
+SINK_STATUS=$(echo "$SINK_STATUS_JSON" | grep -o '"state":"[^"]*"' | head -1 | cut -d'"' -f4 || echo "NOT_DEPLOYED")
 
 if [ "$SINK_STATUS" = "RUNNING" ]; then
     print_status 0 "ClickHouse sink connector status: $SINK_STATUS"
 
-    # Check task statuses
-    FAILED_TASKS=$(curl -s "$CONNECT_URL/connectors/clickhouse-sink-connector/status" 2>/dev/null | grep -o '"state":"FAILED"' | wc -l)
-    if [ "$FAILED_TASKS" -gt 0 ]; then
-        echo -e "${YELLOW}⚠ Warning: $FAILED_TASKS task(s) are in FAILED state${NC}"
+    # Check task count
+    SINK_TASK_COUNT=$(echo "$SINK_STATUS_JSON" | python3 -c "import sys,json; print(len(json.load(sys.stdin).get('tasks',[])))" 2>/dev/null || echo "0")
+    SINK_EXPECTED_TASKS=4
+
+    echo -n "  ClickHouse Sink Tasks: "
+    if [ "$SINK_TASK_COUNT" -eq "$SINK_EXPECTED_TASKS" ]; then
+        echo -e "${GREEN}$SINK_TASK_COUNT/$SINK_EXPECTED_TASKS created${NC}"
+    else
+        echo -e "${YELLOW}$SINK_TASK_COUNT/$SINK_EXPECTED_TASKS created (expected $SINK_EXPECTED_TASKS)${NC}"
+    fi
+
+    # Check task states
+    SINK_RUNNING_TASKS=$(echo "$SINK_STATUS_JSON" | python3 -c "import sys,json; tasks=json.load(sys.stdin).get('tasks',[]); print(sum(1 for t in tasks if t.get('state')=='RUNNING'))" 2>/dev/null || echo "0")
+    SINK_FAILED_TASKS=$(echo "$SINK_STATUS_JSON" | python3 -c "import sys,json; tasks=json.load(sys.stdin).get('tasks',[]); print(sum(1 for t in tasks if t.get('state')=='FAILED'))" 2>/dev/null || echo "0")
+
+    if [ "$SINK_RUNNING_TASKS" -eq "$SINK_EXPECTED_TASKS" ]; then
+        print_status 0 "  All $SINK_RUNNING_TASKS tasks are RUNNING"
+    elif [ "$SINK_FAILED_TASKS" -gt 0 ]; then
+        echo -e "${RED}✗ Warning: $SINK_FAILED_TASKS task(s) are FAILED${NC}"
         echo "  Check logs: docker logs kafka-connect-clickhouse | grep ERROR"
+    else
+        echo -e "${YELLOW}⚠ Warning: Only $SINK_RUNNING_TASKS/$SINK_EXPECTED_TASKS tasks are RUNNING${NC}"
     fi
 elif [ "$SINK_STATUS" = "NOT_DEPLOYED" ]; then
     echo -e "${YELLOW}⚠ ClickHouse sink connector not deployed${NC}"
@@ -322,14 +371,24 @@ echo "Check connector details:"
 echo "  curl $CONNECT_URL/connectors/mysql-source-connector/status | jq"
 echo ""
 
-if [ "$DEBEZIUM_STATUS" = "RUNNING" ]; then
-    echo -e "${GREEN}✓ Snapshot has started!${NC}"
+if [ "$DEBEZIUM_STATUS" = "RUNNING" ] && [ "$MYSQL_TASK_COUNT" -eq "$MYSQL_EXPECTED_TASKS" ]; then
+    echo -e "${GREEN}✓ Connectors deployed successfully with all tasks running!${NC}"
     echo ""
     echo "Next step: Run 04_monitor_snapshot.sh to track progress"
     echo ""
     exit 0
+elif [ "$DEBEZIUM_STATUS" = "RUNNING" ] && [ "$MYSQL_TASK_COUNT" -eq 0 ]; then
+    echo -e "${RED}✗ CRITICAL: MySQL connector is RUNNING but has NO TASKS${NC}"
+    echo ""
+    echo "The snapshot cannot start without tasks."
+    echo "This is the most common issue with Debezium MySQL connectors."
+    echo ""
+    echo "Next step: Run diagnostic to identify the cause"
+    echo "  ./diagnose_mysql_connector.sh"
+    echo ""
+    exit 1
 else
-    echo -e "${YELLOW}⚠ Debezium connector not running properly${NC}"
+    echo -e "${YELLOW}⚠ Connectors not running properly${NC}"
     echo "Check logs and fix issues before proceeding"
     echo ""
     exit 1
