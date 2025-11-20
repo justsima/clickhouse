@@ -22,6 +22,7 @@
 
     "schema.history.internal.kafka.bootstrap.servers": "redpanda:9092",
     "schema.history.internal.kafka.topic": "schema-changes.mysql",
+    "schema.history.internal.recovery.mode": "SCHEMA_ONLY_RECOVERY",
 
     "include.schema.changes": "false",
     "include.query": "false",
