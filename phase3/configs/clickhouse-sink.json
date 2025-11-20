@@ -7,7 +7,7 @@
     "topics.regex": "mysql\\.${MYSQL_DATABASE}\\..*",
 
     "hostname": "${CLICKHOUSE_HOST}",
-    "port": "${CLICKHOUSE_NATIVE_PORT}",
+    "port": "${CLICKHOUSE_PORT}",
     "database": "${CLICKHOUSE_DATABASE}",
     "username": "${CLICKHOUSE_USER}",
     "password": "${CLICKHOUSE_PASSWORD}",
