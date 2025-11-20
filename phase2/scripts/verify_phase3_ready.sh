@@ -178,18 +178,21 @@ echo ""
 CH_USER=$(grep "^CLICKHOUSE_USER=" /home/centos/clickhouse/.env 2>/dev/null | cut -d'=' -f2)
 CH_PASS=$(grep "^CLICKHOUSE_PASSWORD=" /home/centos/clickhouse/.env 2>/dev/null | cut -d'=' -f2)
 
+CH_DATABASE=$(grep "^CLICKHOUSE_DATABASE=" /home/centos/clickhouse/.env 2>/dev/null | cut -d'=' -f2)
+CH_DATABASE=${CH_DATABASE:-analytics}
+
 if [ -n "$CH_USER" ] && [ -n "$CH_PASS" ]; then
     # Test with credentials
-    DB_CHECK=$(curl -s -u "${CH_USER}:${CH_PASS}" "http://localhost:8123/?query=SELECT name FROM system.databases WHERE name='mulasport'" 2>/dev/null)
+    DB_CHECK=$(curl -s -u "${CH_USER}:${CH_PASS}" "http://localhost:8123/?query=SELECT name FROM system.databases WHERE name='${CH_DATABASE}'" 2>/dev/null)
 
-    if echo "$DB_CHECK" | grep -q "mulasport"; then
-        print_status 0 "mulasport database exists"
+    if echo "$DB_CHECK" | grep -q "${CH_DATABASE}"; then
+        print_status 0 "${CH_DATABASE} database exists"
 
         # Count tables
-        TABLE_COUNT=$(curl -s -u "${CH_USER}:${CH_PASS}" "http://localhost:8123/?query=SELECT count() FROM system.tables WHERE database='mulasport'" 2>/dev/null)
+        TABLE_COUNT=$(curl -s -u "${CH_USER}:${CH_PASS}" "http://localhost:8123/?query=SELECT count() FROM system.tables WHERE database='${CH_DATABASE}'" 2>/dev/null)
 
         if [ "$TABLE_COUNT" -gt 0 ]; then
-            print_status 0 "Tables in mulasport: $TABLE_COUNT"
+            print_status 0 "Tables in ${CH_DATABASE}: $TABLE_COUNT"
 
             if [ "$TABLE_COUNT" -ge 400 ]; then
                 print_status 0 "Table count looks good (≥400)"
@@ -197,11 +200,11 @@ if [ -n "$CH_USER" ] && [ -n "$CH_PASS" ]; then
                 echo -e "${YELLOW}⚠ Only $TABLE_COUNT tables (expected ~450)${NC}"
             fi
         else
-            print_status 1 "No tables in mulasport database"
+            print_status 1 "No tables in ${CH_DATABASE} database"
             ISSUES=$((ISSUES + 1))
         fi
     else
-        print_status 1 "mulasport database does NOT exist"
+        print_status 1 "${CH_DATABASE} database does NOT exist"
         echo "  Need to run Phase 1: schema creation"
         ISSUES=$((ISSUES + 1))
     fi
@@ -209,11 +212,11 @@ else
     echo -e "${YELLOW}⚠ ClickHouse credentials not found in .env${NC}"
     echo "  Trying without credentials..."
 
-    DB_CHECK=$(curl -s "http://localhost:8123/?query=SELECT name FROM system.databases WHERE name='mulasport'" 2>/dev/null)
-    if echo "$DB_CHECK" | grep -q "mulasport"; then
-        print_status 0 "mulasport database exists"
+    DB_CHECK=$(curl -s "http://localhost:8123/?query=SELECT name FROM system.databases WHERE name='${CH_DATABASE}'" 2>/dev/null)
+    if echo "$DB_CHECK" | grep -q "${CH_DATABASE}"; then
+        print_status 0 "${CH_DATABASE} database exists"
     else
-        print_status 1 "Cannot verify mulasport database"
+        print_status 1 "Cannot verify ${CH_DATABASE} database"
         ISSUES=$((ISSUES + 1))
     fi
 fi
