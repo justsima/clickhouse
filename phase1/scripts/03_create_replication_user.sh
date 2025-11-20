@@ -4,14 +4,16 @@
 
 set -e
 
-# Load environment variables
+# Load environment variables from main .env file
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ENV_FILE="${SCRIPT_DIR}/../configs/.env"
+PHASE1_DIR="$(dirname "$SCRIPT_DIR")"
+PROJECT_ROOT="$(dirname "$PHASE1_DIR")"
 
-if [ -f "$ENV_FILE" ]; then
-    source "$ENV_FILE"
+if [ -f "$PROJECT_ROOT/.env" ]; then
+    source "$PROJECT_ROOT/.env"
 else
-    echo "ERROR: .env file not found at $ENV_FILE"
+    echo "ERROR: .env file not found at $PROJECT_ROOT/.env"
+    echo "Please ensure the main .env file exists with MySQL credentials"
     exit 1
 fi
 

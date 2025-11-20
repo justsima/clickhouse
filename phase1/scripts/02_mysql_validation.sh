@@ -4,13 +4,23 @@
 
 set -e
 
-# Load environment variables
-if [ -f "/home/user/clickhouse/phase1/configs/.env" ]; then
-    source /home/user/clickhouse/phase1/configs/.env
+# Load environment variables from main .env file
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PHASE1_DIR="$(dirname "$SCRIPT_DIR")"
+PROJECT_ROOT="$(dirname "$PHASE1_DIR")"
+
+if [ -f "$PROJECT_ROOT/.env" ]; then
+    source "$PROJECT_ROOT/.env"
 else
-    echo "ERROR: .env file not found at /home/user/clickhouse/phase1/configs/.env"
-    echo "Please copy .env.example to .env and fill in your MySQL credentials"
+    echo "ERROR: .env file not found at $PROJECT_ROOT/.env"
+    echo "Please ensure the main .env file exists with MySQL credentials"
     exit 1
+fi
+
+# If replication user not set, use main MySQL user
+if [ -z "$MYSQL_REPLICATION_USER" ]; then
+    MYSQL_REPLICATION_USER="$MYSQL_USER"
+    MYSQL_REPLICATION_PASSWORD="$MYSQL_PASSWORD"
 fi
 
 echo "========================================"
@@ -249,7 +259,7 @@ fi
 # Save validation report
 echo "9. Saving Validation Report"
 echo "---------------------------"
-REPORT_FILE="/home/user/clickhouse/phase1/mysql_validation_report.txt"
+REPORT_FILE="$PROJECT_ROOT/mysql_validation_report.txt"
 {
     echo "=== MySQL Validation Report ==="
     echo "Date: $(date)"
