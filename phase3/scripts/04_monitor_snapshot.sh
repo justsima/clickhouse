@@ -19,7 +19,7 @@ BOLD='\033[1m'
 NC='\033[0m'
 
 # Configuration
-CONNECT_URL="http://localhost:8083"
+CONNECT_URL="http://localhost:8085"
 MONITOR_INTERVAL=10
 EXPECTED_TOTAL_TABLES=450
 
@@ -387,13 +387,13 @@ for task in tasks:
         if [ "$MYSQL_ERRORS" -gt 0 ]; then
             echo -e "  ${RED}✗ MySQL connector has $MYSQL_ERRORS failed task(s)${NC}"
             echo "    Check error trace:"
-            echo "    curl -s http://localhost:8083/connectors/mysql-source-connector/status | python3 -m json.tool"
+            echo "    curl -s http://localhost:8085/connectors/mysql-source-connector/status | python3 -m json.tool"
         fi
 
         if [ "$SINK_ERRORS" -gt 0 ]; then
             echo -e "  ${RED}✗ ClickHouse sink has $SINK_ERRORS failed task(s)${NC}"
             echo "    Check error trace:"
-            echo "    curl -s http://localhost:8083/connectors/clickhouse-sink-connector/status | python3 -m json.tool"
+            echo "    curl -s http://localhost:8085/connectors/clickhouse-sink-connector/status | python3 -m json.tool"
         fi
 
         echo ""
