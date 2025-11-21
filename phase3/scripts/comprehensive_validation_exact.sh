@@ -279,19 +279,35 @@ if [ "$DLQ_EXISTS" -eq 0 ]; then
     print_status 0 "DLQ topic does not exist (no errors occurred)"
     DLQ_TOTAL_MESSAGES=0
 else
-    DLQ_INFO=$(docker exec redpanda-clickhouse rpk topic describe clickhouse-dlq --brokers localhost:9092 2>/dev/null)
-    DLQ_TOTAL_MESSAGES=$(echo "$DLQ_INFO" | grep -E "^[0-9]+" | awk 'NR==2 {print $5}')
+    print_info "DLQ topic exists, checking message count..."
 
+    # Try to get DLQ message count with better error handling
+    DLQ_INFO=$(docker exec redpanda-clickhouse rpk topic describe clickhouse-dlq --brokers localhost:9092 2>/dev/null)
+
+    # Try multiple parsing methods
+    DLQ_TOTAL_MESSAGES=$(echo "$DLQ_INFO" | grep -i "high.water" | awk '{print $NF}' | head -1)
+
+    # If that didn't work, try another method
     if ! [[ "$DLQ_TOTAL_MESSAGES" =~ ^[0-9]+$ ]]; then
-        DLQ_TOTAL_MESSAGES=0
+        DLQ_TOTAL_MESSAGES=$(echo "$DLQ_INFO" | grep -E "^[0-9]" | awk '{print $5}' | head -1)
     fi
 
-    if [ "$DLQ_TOTAL_MESSAGES" -eq 0 ]; then
-        print_status 0 "DLQ exists but has 0 messages"
+    # Final validation - if still not a number, skip DLQ analysis
+    if ! [[ "$DLQ_TOTAL_MESSAGES" =~ ^[0-9]+$ ]]; then
+        print_warning "Could not parse DLQ message count, skipping DLQ analysis"
+        DLQ_TOTAL_MESSAGES=0
+        DLQ_SKIP=true
     else
-        print_status 1 "DLQ contains $DLQ_TOTAL_MESSAGES messages"
+        DLQ_SKIP=false
+    fi
 
-        # Sample DLQ messages
+    if [ "$DLQ_SKIP" = false ]; then
+        if [ "$DLQ_TOTAL_MESSAGES" -eq 0 ]; then
+            print_status 0 "DLQ exists but has 0 messages"
+        else
+            print_status 1 "DLQ contains $DLQ_TOTAL_MESSAGES messages"
+
+            # Sample DLQ messages
         print_info "Analyzing DLQ messages..."
 
         docker exec redpanda-clickhouse rpk topic consume clickhouse-dlq \
