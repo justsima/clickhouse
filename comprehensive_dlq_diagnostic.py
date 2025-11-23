@@ -34,6 +34,9 @@ CONNECT_URL = "http://localhost:8085"
 DLQ_TOPIC = "clickhouse-dlq"
 SAMPLE_SIZE = 1000  # Number of DLQ messages to analyze
 
+# Global flag to track if we need sudo for docker commands
+USE_SUDO = False
+
 # Required Docker containers
 REQUIRED_CONTAINERS = {
     'redpanda-clickhouse': {'service': 'redpanda', 'wait_time': 30},
@@ -157,8 +160,18 @@ def print_error(message: str):
     print(f"{Colors.RED}✗ ERROR:{Colors.NC} {message}")
 
 
-def run_command(cmd: List[str], capture_output=True, timeout=30) -> Tuple[bool, str]:
+def run_command(cmd: List[str], capture_output=True, timeout=30, use_sudo=None) -> Tuple[bool, str]:
     """Run shell command and return success status and output"""
+    global USE_SUDO
+
+    # Determine if we should use sudo
+    if use_sudo is None:
+        use_sudo = USE_SUDO
+
+    # Prepend sudo if needed and command is docker-related
+    if use_sudo and len(cmd) > 0 and (cmd[0] == 'docker' or 'docker' in cmd[0]):
+        cmd = ['sudo'] + cmd
+
     try:
         if capture_output:
             result = subprocess.run(
@@ -177,9 +190,48 @@ def run_command(cmd: List[str], capture_output=True, timeout=30) -> Tuple[bool, 
         return False, str(e)
 
 
+def detect_sudo_requirement() -> bool:
+    """Detect if we need sudo to run docker commands"""
+    # Try without sudo first
+    result = subprocess.run(
+        ['docker', 'ps'],
+        capture_output=True,
+        text=True,
+        timeout=10
+    )
+
+    if result.returncode == 0:
+        # Docker works without sudo
+        return False
+    else:
+        # Try with sudo
+        result = subprocess.run(
+            ['sudo', 'docker', 'ps'],
+            capture_output=True,
+            text=True,
+            timeout=10
+        )
+        if result.returncode == 0:
+            # Docker works with sudo
+            return True
+        else:
+            # Docker doesn't work at all
+            return False
+
+
 def check_docker_installed() -> bool:
-    """Check if Docker is installed"""
+    """Check if Docker is installed and configure sudo usage"""
+    global USE_SUDO
+
+    # First, detect if we need sudo
+    USE_SUDO = detect_sudo_requirement()
+
+    # Now check if docker is accessible
     success, _ = run_command(['docker', '--version'])
+
+    if success and USE_SUDO:
+        print_info("Docker requires sudo - running all docker commands with sudo")
+
     return success
 
 
