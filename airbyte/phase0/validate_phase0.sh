@@ -75,7 +75,7 @@ test_tcp_port() {
     fi
 }
 
-print_header()
+print_header
 
 print_section "Loading configuration"
 if [ -f "$ENV_FILE" ]; then
