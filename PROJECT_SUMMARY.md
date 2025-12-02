@@ -5,36 +5,25 @@
 **Objective**: Migrate data from DigitalOcean Managed MySQL to ClickHouse for analytics, with real-time CDC (Change Data Capture) synchronization and Power BI integration.
 
 **Start Date**: November 26, 2025  
-**Current Status**: ✅ Core migration complete, Power BI integration in progress
+**Current Status**: ✅ Zambia & Ghana pipelines deployed; Power BI automation in progress
 
 ---
 
 ## Infrastructure
 
-### Source Database (MySQL)
+### Source Databases (MySQL)
 
-| Field     | Value                                                                     |
-| --------- | ------------------------------------------------------------------------- |
-| Host      | `mulasport-db-mysql-fra1-89664-do-user-7185962-0.b.db.ondigitalocean.com` |
-| Port      | `25060`                                                                   |
-| Database  | `mulazamflatoddbet`                                                       |
-| User      | `mulasport`                                                               |
-| SSL       | Required                                                                  |
-| Tables    | ~450 tables                                                               |
-| Data Size | ~22 GB                                                                    |
+| Country | Host                                                                      | Port    | Database              | User        | SSL | Notes              |
+| ------- | ------------------------------------------------------------------------- | ------- | --------------------- | ----------- | --- | ------------------ |
+| Zambia  | `mulasport-db-mysql-fra1-89664-do-user-7185962-0.b.db.ondigitalocean.com` | `25060` | `mulazamflatoddbet`   | `mulasport` | Req | ~450 tables, 22 GB |
+| Ghana   | `convex6-db-mysql-fra1-33166-do-user-7185962-0.d.db.ondigitalocean.com`   | `25060` | `mulaghanaflatoddbet` | `convex6`   | Req | New pipeline       |
 
-### Target Database (ClickHouse)
+### Target Databases (ClickHouse)
 
-| Field         | Value             |
-| ------------- | ----------------- |
-| Host          | `142.93.168.177`  |
-| HTTP Port     | `8123`            |
-| Native Port   | `9000`            |
-| Database      | `airbyte_cdc`     |
-| Username      | `default`         |
-| Password      | `clickhouse@2025` |
-| Tables Synced | 73 tables         |
-| Rows Synced   | 45+ million       |
+| Database        | Purpose     | Status                          |
+| --------------- | ----------- | ------------------------------- |
+| `airbyte_cdc`   | Zambia data | 73 tables, 45M rows synced      |
+| `airbyte_ghana` | Ghana data  | Initial sync configured/running |
 
 ### VPS Server
 
@@ -109,6 +98,14 @@
 - [ ] Set up Azure Windows VM for Data Gateway
 - [ ] Configure scheduled refresh (hourly)
 
+### Ghana Pipeline Deployment ✅
+
+- [x] Added Ghana MySQL credentials and ClickHouse schema (`airbyte_ghana`)
+- [x] Created Airbyte Ghana source connector with SSL/TLS + timezone config
+- [x] Created ClickHouse destination scoped to `airbyte_ghana`
+- [x] Configured Ghana Airbyte connection (Full Refresh | Overwrite) for initial sync
+- [x] Validated connection tests and confirmed sync is running in Airbyte UI
+
 ---
 
 ## Issues Resolved
@@ -157,13 +154,13 @@
 
 ## Connection Credentials
 
-### ClickHouse (For All Users)
+### ClickHouse (Shared Access)
 
 ```
 Host: 142.93.168.177
 HTTP Port: 8123
 Native Port: 9000
-Database: airbyte_cdc
+Databases: airbyte_cdc (Zambia), airbyte_ghana (Ghana)
 Username: default
 Password: clickhouse@2025
 ```
@@ -263,31 +260,36 @@ curl "http://142.93.168.177:8123/?user=default&password=clickhouse@2025&database
 
 1. [ ] Set up refresh failure alerts
 2. [ ] Document refresh schedule
-3. [ ] Create monitoring dashboard for sync status
+3. [ ] Create monitoring dashboard for Zambia & Ghana sync status
+4. [ ] Turn on incremental/CDC mode for Ghana once validated
 
 ---
 
 ## Architecture Diagram
 
 ```
-┌─────────────────────────┐
-│  MySQL (Source)         │
-│  DigitalOcean Managed   │
-│  Port: 25060            │
-└───────────┬─────────────┘
-            │ Airbyte CDC (Hourly)
-            ▼
-┌─────────────────────────┐
-│  ClickHouse VPS         │
-│  142.93.168.177         │
-│  Port: 8123/9000        │
-│  Database: airbyte_cdc  │
-│  73 tables, 45M+ rows   │
-└───────────┬─────────────┘
-            │
-    ┌───────┴───────┐
-    │               │
-    ▼               ▼
+┌──────────────────────────┐      ┌──────────────────────────┐
+│ MySQL (Zambia Source)    │      │ MySQL (Ghana Source)     │
+│ DigitalOcean Managed     │      │ DigitalOcean Managed     │
+│ Port: 25060              │      │ Port: 25060              │
+└───────────┬──────────────┘      └───────────┬──────────────┘
+      │ Airbyte CDC (Full Refresh/Hourly)│
+      ├──────────────────────────────────┤
+      ▼                                  ▼
+    ┌────────────────────────────────────────┐
+    │      Airbyte OSS on kind (VPS)         │
+    └───────────┬────────────────────────────┘
+          │ Writes via ClickHouse sink
+          ▼
+┌────────────────────────────────────────────────┐
+│ ClickHouse VPS (142.93.168.177)                │
+│ Databases: airbyte_cdc (Zambia), airbyte_ghana │
+│ Ports: 8123 / 9000                             │
+└───────────┬────────────────────────────────────┘
+      │
+  ┌───────┴───────┐
+  │               │
+  ▼               ▼
 ┌────────────┐  ┌────────────────┐
 │ Backend    │  │ Power BI       │
 │ Services   │  │ (via Gateway)  │
@@ -306,7 +308,7 @@ curl "http://142.93.168.177:8123/?user=default&password=clickhouse@2025&database
 | `airbyte/phase1/deploy_airbyte.sh`       | Airbyte deployment script     |
 | `airbyte/phase2/configure_connectors.sh` | Connector validation script   |
 | `airbyte/phase3/validate_sync.sh`        | Sync monitoring script        |
-| `.env`                                   | Configuration variables       |
+| `.env`                                   | Zambia & Ghana connector vars |
 | `PROJECT_SUMMARY.md`                     | This summary document         |
 
 ---
@@ -333,4 +335,4 @@ For issues with:
 
 ---
 
-_Last Updated: November 30, 2025_
+_Last Updated: December 3, 2025_
